@@ -110,8 +110,11 @@ int main(int argc, char* argv[])
 
         if(hidKeyboardDown(KBD_9))
         {
-            delete controllers.back();
-            controllers.pop_back();
+            if(controllers.size() > 0)
+            {
+                delete controllers.back();
+                controllers.pop_back();
+            }
         }
 
         svcSleepThread(6250000);
