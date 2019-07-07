@@ -6,6 +6,9 @@
 // Include the main libnx system header, for Switch development
 #include <switch.h>
 
+// Include headers from other parts of the program
+#include "controller.hpp"
+
 extern "C"
 {
     // Sysmodules should not use applet*.
@@ -55,6 +58,10 @@ void __attribute__((weak)) __appInit(void)
         fatalSimple(MAKERESULT(Module_Libnx, LibnxError_InitFail_FS));
 
     fsdevMountSdmc();
+
+    rc = hiddbgInitialize();
+    if (R_FAILED(rc))
+        fatalSimple(rc);
 }
 
 void __attribute__((weak)) userAppExit(void);
@@ -64,7 +71,7 @@ void __attribute__((weak)) __appExit(void)
     // Cleanup default services.
     fsdevUnmountAll();
     fsExit();
-    hidExit();// Enable this if you want to use HID.
+    hidExit();
     smExit();
 }
 
@@ -72,10 +79,14 @@ void __attribute__((weak)) __appExit(void)
 int main(int argc, char* argv[])
 {
     // Initialization code can go here.
+    initController();
 
     // Your code / main loop goes here.
     // If you need threads, you can use threadCreate etc.
-    svcSleepThread(6250000);
+    while(true)
+    {
+        svcSleepThread(6250000);
+    }
 
     // Deinitialization and resources clean up code can go here.
     return 0;
