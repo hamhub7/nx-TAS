@@ -79,7 +79,18 @@ void __attribute__((weak)) __appExit(void)
 int main(int argc, char* argv[])
 {
     // Initialization code can go here.
-    initController();
+    while(true)
+    {
+        hidScanInput();
+
+        if(hidKeyboardDown(KBD_0))
+        {
+            initController();
+            break;
+        }
+
+        svcSleepThread(6250000);
+    }
 
     // Your code / main loop goes here.
     // If you need threads, you can use threadCreate etc.
