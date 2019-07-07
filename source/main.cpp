@@ -88,23 +88,24 @@ void __attribute__((weak)) __appExit(void)
 int main(int argc, char* argv[])
 {
     // Initialization code can go here.
+    TasController *controller;
+
+    // Your code / main loop goes here.
+    // If you need threads, you can use threadCreate etc.
     while(true)
     {
         hidScanInput();
 
         if(hidKeyboardDown(KBD_0))
         {
-            initController();
-            break;
+            controller = new TasController();
         }
 
-        svcSleepThread(6250000);
-    }
+        if(hidKeyboardDown(KBD_9))
+        {
+            delete controller;
+        }
 
-    // Your code / main loop goes here.
-    // If you need threads, you can use threadCreate etc.
-    while(true)
-    {
         svcSleepThread(6250000);
     }
 
