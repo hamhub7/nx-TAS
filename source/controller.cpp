@@ -1,15 +1,7 @@
 #include "controller.hpp"
 
-class TasController
+namespace TasController
 {
-    private:
-
-    u64 HdlsHandle = 0;
-    HiddbgHdlsDeviceInfo device = {0};
-    HiddbgHdlsState state = {0};
-
-    public:
-
     TasController()
     {
         // Device is a procon
