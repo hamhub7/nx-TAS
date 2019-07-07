@@ -88,7 +88,7 @@ void __attribute__((weak)) __appExit(void)
 int main(int argc, char* argv[])
 {
     // Initialization code can go here.
-    TasController *controller;
+    std::vector<TasController*> controllers;
 
     // Your code / main loop goes here.
     // If you need threads, you can use threadCreate etc.
@@ -98,12 +98,13 @@ int main(int argc, char* argv[])
 
         if(hidKeyboardDown(KBD_0))
         {
-            controller = new TasController();
+            controllers.push_back(new TasController());
         }
 
         if(hidKeyboardDown(KBD_9))
         {
-            delete controller;
+            delete controllers.back();
+            controllers.pop_back();
         }
 
         svcSleepThread(6250000);
