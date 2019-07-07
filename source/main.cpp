@@ -104,7 +104,8 @@ int main(int argc, char* argv[])
 
         if(hidKeyboardDown(KBD_0))
         {
-            controllers.push_back(new TasController());
+            if(controllers.size() < 8)
+                controllers.push_back(new TasController());
         }
 
         if(hidKeyboardDown(KBD_9))
