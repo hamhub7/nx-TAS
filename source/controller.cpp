@@ -10,11 +10,11 @@ void initController()
     device.type = BIT(0);
 
     // Colors
-    device.singleColorBody = RGBA8_MAXALPHA(255,0,0);
-    device.singleColorButtons = RGBA8_MAXALPHA(0,0,255);
+    device.singleColorBody = RGBA8_MAXALPHA(61,82,242);
+    device.singleColorButtons = RGBA8_MAXALPHA(80,217,203);
 
     // Charge is max
-    state.batteryCharge = 4;
+    state.batteryCharge = 100;
 
     // Set Buttons and Joysticks
     state.buttons = 0;

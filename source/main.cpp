@@ -48,6 +48,15 @@ void __attribute__((weak)) __appInit(void)
     if (R_FAILED(rc))
         fatalSimple(MAKERESULT(Module_Libnx, LibnxError_InitFail_SM));
 
+    rc = setsysInitialize();
+    if (R_SUCCEEDED(rc)) {
+        SetSysFirmwareVersion fw;
+        rc = setsysGetFirmwareVersion(&fw);
+        if (R_SUCCEEDED(rc))
+            hosversionSet(MAKEHOSVERSION(fw.major, fw.minor, fw.micro));
+        setsysExit();
+    }
+
     // HID
     rc = hidInitialize();
     if (R_FAILED(rc))
