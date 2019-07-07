@@ -19,13 +19,8 @@ TasController::TasController()
     state.joysticks[JOYSTICK_RIGHT].dx = 0;
     state.joysticks[JOYSTICK_RIGHT].dy = 0;
 
-    // Attach Work Buffer
-    Result rc = hiddbgAttachHdlsWorkBuffer();
-    if (R_FAILED(rc))
-        fatalSimple(rc);
-
     // Attach the controller
-    rc = hiddbgAttachHdlsVirtualDevice(&HdlsHandle, &device);
+    Result rc = hiddbgAttachHdlsVirtualDevice(&HdlsHandle, &device);
     if (R_FAILED(rc))
         fatalSimple(rc);
 }
@@ -34,11 +29,6 @@ TasController::~TasController()
 {
     // Detatch Controller
     Result rc = hiddbgDetachHdlsVirtualDevice(HdlsHandle);
-    if (R_FAILED(rc))
-        fatalSimple(rc);
-
-    // Release Work Buffer
-    rc = hiddbgReleaseHdlsWorkBuffer();
     if (R_FAILED(rc))
         fatalSimple(rc);
 }

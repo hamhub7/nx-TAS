@@ -91,6 +91,11 @@ int main(int argc, char* argv[])
     // Initialization code can go here.
     std::vector<TasController*> controllers;
 
+    // Attach Work Buffer
+    Result rc = hiddbgAttachHdlsWorkBuffer();
+    if (R_FAILED(rc))
+        fatalSimple(rc);
+
     // Your code / main loop goes here.
     // If you need threads, you can use threadCreate etc.
     while(true)
