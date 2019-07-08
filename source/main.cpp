@@ -117,6 +117,14 @@ int main(int argc, char* argv[])
             }
         }
 
+        if(hidKeyboardDown(KBD_8))
+        {
+            if(controllers.size() > 0)
+            {
+                controllers.front()->pressA();
+            }
+        }
+
         svcSleepThread(6250000);
     }
 

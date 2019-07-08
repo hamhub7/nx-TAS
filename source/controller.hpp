@@ -14,4 +14,5 @@ class TasController
 
     TasController();
     ~TasController();
+    void pressA();
 };
