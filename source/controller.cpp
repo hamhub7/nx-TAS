@@ -46,6 +46,4 @@ void TasController::pressA()
     Result rc = hiddbgSetHdlsState(HdlsHandle, &state);
     if(R_FAILED(rc))
         fatalSimple(rc);
-
-    svcSleepThread(6250000);
 }

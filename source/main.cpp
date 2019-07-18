@@ -10,6 +10,12 @@
 // Include headers from other parts of the program
 #include "controller.hpp"
 
+// Create VSync event
+Event vsync_event;
+
+// Initialize frame counter variable
+int frameCount = 0;
+
 extern "C"
 {
     // Sysmodules should not use applet*.
@@ -72,6 +78,11 @@ void __attribute__((weak)) __appInit(void)
     rc = hiddbgInitialize();
     if (R_FAILED(rc))
         fatalSimple(rc);
+
+    // vsync
+    rc = viInitialize(ViServiceType_System);
+    if(R_FAILED(rc))
+        fatalSimple(rc);
 }
 
 void __attribute__((weak)) userAppExit(void);
@@ -85,19 +96,51 @@ void __attribute__((weak)) __appExit(void)
     smExit();
 }
 
+void frameIncrement()
+{
+    while(true)
+    {
+        // Wait for a new frame...
+        Result rc = eventWait(&vsync_event, 0xFFFFFFFFFFF);
+        if(R_FAILED(rc))
+            fatalSimple(rc);
+
+        // ... Then increment the counter
+        ++frameCount;
+    }
+}
+
 // Main program entrypoint
 int main(int argc, char* argv[])
 {
+    // Init other services
+    ViDisplay disp;
+    Result rc = viOpenDefaultDisplay(&disp);
+    if(R_FAILED(rc))
+        fatalSimple(rc);
+
+    rc = viGetDisplayVsyncEvent(&disp, &vsync_event);
+    if(R_FAILED(rc))
+        fatalSimple(rc);
+
     // Initialization code can go here.
     std::vector<TasController*> controllers;
 
     // Attach Work Buffer
-    Result rc = hiddbgAttachHdlsWorkBuffer();
+    rc = hiddbgAttachHdlsWorkBuffer();
     if (R_FAILED(rc))
         fatalSimple(rc);
 
+    // Create new thread for counting frames
+    Thread countThread;
+    rc = threadCreate(&countThread, frameIncrement, NULL, 0x4000, 49, 3);
+    if(R_FAILED(rc))
+        fatalSimple(rc);
+    rc = threadStart(&countThread);
+    if(R_FAILED(rc))
+        fatalSimple(rc);
+
     // Your code / main loop goes here.
-    // If you need threads, you can use threadCreate etc.
     while(true)
     {
         hidScanInput();
