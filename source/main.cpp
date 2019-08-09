@@ -96,12 +96,12 @@ void __attribute__((weak)) __appExit(void)
     smExit();
 }
 
-void frameIncrement()
+void frameIncrement(void* _)
 {
     while(true)
     {
         // Wait for a new frame...
-        Result rc = eventWait(&vsync_event, 0xFFFFFFFFFFF);
+        Result rc = eventWait(&vsync_event, U64_MAX);
         if(R_FAILED(rc))
             fatalSimple(rc);
 
@@ -165,6 +165,14 @@ int main(int argc, char* argv[])
             if(controllers.size() > 0)
             {
                 controllers.front()->pressA();
+            }
+        }
+
+        if(hidKeyboardDown(KBD_7))
+        {
+            if(controllers.size() > 0)
+            {
+                controllers.front()->runScript("sdmc:/scripts/script0.txt");
             }
         }
 
