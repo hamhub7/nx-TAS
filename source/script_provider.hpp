@@ -11,19 +11,19 @@ class ScriptProvider
 {
 private:
     mutable std::mutex mutex;
-    std::queue<struct controlMsg> internalQueue;
+    std::queue<std::shared_ptr<struct controlMsg>> internalQueue;
 
 protected:
-    void pushToQueue(struct controlMsg msg)
+    void pushToQueue(std::shared_ptr<struct controlMsg> msg)
     {
         std::lock_guard<std::mutex> guard(mutex);
         return internalQueue.push(msg);
     }
 
-    struct controlMsg pullFromQueue()
+    std::shared_ptr<struct controlMsg> pullFromQueue()
     {
         std::lock_guard<std::mutex> guard(mutex);
-        struct controlMsg msg = internalQueue.front();
+        std::shared_ptr<struct controlMsg> msg = internalQueue.front();
         internalQueue.pop();
         return msg;
     }
@@ -34,8 +34,13 @@ public:
         std::lock_guard<std::mutex> guard(mutex);
         return internalQueue.empty();
     }
+    int queueSize()
+    {
+        std::lock_guard<std::mutex> guard(mutex);
+        return internalQueue.size();
+    }
 
-    struct controlMsg nextLine()
+    std::shared_ptr<struct controlMsg> nextLine()
     {
         return pullFromQueue();
     }
@@ -64,11 +69,16 @@ public:
     }
     void populateQueue()
     {
-        int frame;
-        std::string keyStr, lStickStr, rStickStr;
-        stream >> frame >> keyStr >> lStickStr >> rStickStr;
-        struct controlMsg msg = lineAsControlMsg(frame, keyStr, lStickStr, rStickStr);
-        pushToQueue(msg);
+        if(queueSize() < 15) {
+            int frame;
+            std::string keyStr, lStickStr, rStickStr;
+            while(queueSize() < 30) {
+                stream >> frame >> keyStr >> lStickStr >> rStickStr;
+                struct controlMsg msg = lineAsControlMsg(frame, keyStr, lStickStr, rStickStr);
+                std::shared_ptr<struct controlMsg> sharedPtr = std::make_shared<struct controlMsg>(msg);
+                pushToQueue(sharedPtr);
+            }
+        }
     }
 
 };

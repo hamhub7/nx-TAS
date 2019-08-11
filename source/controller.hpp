@@ -27,21 +27,25 @@ class TasController
         auto provider = std::make_shared<T>(std::forward<Args>(args)...);
 
         provider->populateQueue();
-        struct controlMsg nextLine = provider->nextLine();
+        std::shared_ptr<struct controlMsg> nextLine = provider->nextLine();
         provider->populateQueue();
 
         int currentFrame = 0;
 
-        while(provider->hasNextLine() || nextLine.frame <= currentFrame)
+        while(provider->hasNextLine() || nextLine->frame <= currentFrame)
         {
-            if(nextLine.frame == currentFrame)
+            if(nextLine->frame == currentFrame)
             {
                 runMsg(nextLine);
-                if(provider->hasNextLine()) nextLine = provider->nextLine();
+                if(provider->hasNextLine())
+                {
+                    nextLine.reset();
+                    nextLine = provider->nextLine();
+                }
             }
             else
             {
-                runMsg(emptyMsg);
+                runMsg(std::make_shared<struct controlMsg>(emptyMsg));
             }
 
             pushProvider(provider);
@@ -58,12 +62,12 @@ class TasController
 
         }
     }
-    void runMsg(struct controlMsg msg)
+    void runMsg(std::shared_ptr<struct controlMsg> msg)
     {
-        state.buttons = msg.keys;
-        state.joysticks[JOYSTICK_LEFT].dx = msg.joy_l_x;
-        state.joysticks[JOYSTICK_LEFT].dy = msg.joy_r_x;
-        state.joysticks[JOYSTICK_RIGHT].dx = msg.joy_l_y;
-        state.joysticks[JOYSTICK_RIGHT].dy = msg.joy_r_y;
+        state.buttons = msg->keys;
+        state.joysticks[JOYSTICK_LEFT].dx = msg->joy_l_x;
+        state.joysticks[JOYSTICK_LEFT].dy = msg->joy_r_x;
+        state.joysticks[JOYSTICK_RIGHT].dx = msg->joy_l_y;
+        state.joysticks[JOYSTICK_RIGHT].dy = msg->joy_r_y;
     }
 };
