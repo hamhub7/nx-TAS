@@ -3,12 +3,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <vector>
+#include <string>
 
 // Include the main libnx system header, for Switch development
 #include <switch.h>
 
 // Include headers from other parts of the program
 #include "controller.hpp"
+#include "script_provider.hpp"
+#include "script_populator.hpp"
 
 // Create VSync event
 Event vsync_event;
@@ -132,6 +135,8 @@ int main(int argc, char* argv[])
         fatalSimple(rc);
 
     // Create new thread for counting frames
+    // Commented out as it was stealing vsync events from the script runner
+    /*
     Thread countThread;
     rc = threadCreate(&countThread, frameIncrement, NULL, 0x4000, 49, 3);
     if(R_FAILED(rc))
@@ -139,6 +144,10 @@ int main(int argc, char* argv[])
     rc = threadStart(&countThread);
     if(R_FAILED(rc))
         fatalSimple(rc);
+    */
+
+    // Start thread for populating script providers
+    startPopulatorThread();
 
     // Your code / main loop goes here.
     while(true)
@@ -172,7 +181,7 @@ int main(int argc, char* argv[])
         {
             if(controllers.size() > 0)
             {
-                controllers.front()->runScript("sdmc:/scripts/script0.txt");
+                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script0.txt");
             }
         }
 
