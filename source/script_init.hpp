@@ -24,5 +24,3 @@ struct controlMsg
 std::vector<struct controlMsg> getScriptLines(std::string fileName);
 
 struct controlMsg lineAsControlMsg(int frame, std::string keyStr, std::string lStickStr, std::string rStickStr);
-
-const struct controlMsg emptyMsg = {0, 0, 0, 0, 0, 0};

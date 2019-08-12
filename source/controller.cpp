@@ -74,3 +74,34 @@ void TasController::pressA()
         frames++;
     }
 }
+
+void TasController::waitForVsync()
+{
+    Result rc = eventWait(&vsync_event, U64_MAX);
+    if(R_FAILED(rc))
+        fatalSimple(rc);
+}
+void TasController::setInputNextFrame()
+{
+    waitForVsync();
+    Result rc = hiddbgSetHdlsState(HdlsHandle, &state);
+    if(R_FAILED(rc))
+        fatalSimple(rc);
+}
+
+void TasController::runMsg(std::shared_ptr<struct controlMsg> msg)
+{
+    state.buttons = msg->keys;
+    state.joysticks[JOYSTICK_LEFT].dx = msg->joy_l_x;
+    state.joysticks[JOYSTICK_LEFT].dy = msg->joy_r_x;
+    state.joysticks[JOYSTICK_RIGHT].dx = msg->joy_l_y;
+    state.joysticks[JOYSTICK_RIGHT].dy = msg->joy_r_y;
+}
+void emptyMsg()
+{
+    state.buttons = 0;
+    state.joysticks[JOYSTICK_LEFT].dx = 0;
+    state.joysticks[JOYSTICK_LEFT].dy = 0;
+    state.joysticks[JOYSTICK_RIGHT].dx = 0;
+    state.joysticks[JOYSTICK_RIGHT].dy = 0;
+}

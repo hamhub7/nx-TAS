@@ -22,6 +22,9 @@ class TasController
     ~TasController();
     void pressA();
 
+    void waitForVsync();
+    void setInputNextFrame();
+
     template<class T, class... Args> void runScript(Args&&... args)
     {
         auto provider = std::make_shared<T>(std::forward<Args>(args)...);
@@ -42,32 +45,30 @@ class TasController
                     nextLine.reset();
                     nextLine = provider->nextLine();
                 }
+                else
+                {
+                    setInputNextFrame();
+                    emptyMsg();
+                    setInputNextFrame();
+                    break;
+                }
             }
             else
             {
-                runMsg(std::make_shared<struct controlMsg>(emptyMsg));
+                emptyMsg();
             }
 
             pushProvider(provider);
 
-            Result rc = eventWait(&vsync_event, U64_MAX);
-            if(R_FAILED(rc))
-                fatalSimple(rc);
-
-            rc = hiddbgSetHdlsState(HdlsHandle, &state);
-            if(R_FAILED(rc))
-                fatalSimple(rc);
+            setInputNextFrame();
 
             currentFrame++;
 
         }
+        nextLine.reset();
+
+        waitForVsync();
     }
-    void runMsg(std::shared_ptr<struct controlMsg> msg)
-    {
-        state.buttons = msg->keys;
-        state.joysticks[JOYSTICK_LEFT].dx = msg->joy_l_x;
-        state.joysticks[JOYSTICK_LEFT].dy = msg->joy_r_x;
-        state.joysticks[JOYSTICK_RIGHT].dx = msg->joy_l_y;
-        state.joysticks[JOYSTICK_RIGHT].dy = msg->joy_r_y;
-    }
+    void runMsg(std::shared_ptr<struct controlMsg> msg);
+    void emptyMsg();
 };
