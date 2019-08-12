@@ -35,7 +35,7 @@ class TasController
 
         int currentFrame = 0;
 
-        while(provider->hasNextLine() || nextLine->frame <= currentFrame)
+        while(provider->hasNextLine())
         {
             if(nextLine->frame == currentFrame)
             {
@@ -47,8 +47,6 @@ class TasController
                 }
                 else
                 {
-                    setInputNextFrame();
-                    emptyMsg();
                     setInputNextFrame();
                     break;
                 }
@@ -65,6 +63,9 @@ class TasController
             currentFrame++;
 
         }
+        emptyMsg();
+        setInputNextFrame();
+
         nextLine.reset();
 
         waitForVsync();
