@@ -58,6 +58,14 @@ class LineStreamScriptProvider: public ScriptProvider
 private:
     std::istream& stream;
 
+protected:
+    virtual void afterEOF()
+    {}
+    virtual bool shouldPopulate()
+    {
+        return queueSize() < 15;
+    }
+
 public:
     LineStreamScriptProvider(std::istream& mStream)
     : stream(mStream)
@@ -69,14 +77,20 @@ public:
     }
     void populateQueue()
     {
-        if(queueSize() < 15) {
+        if(shouldPopulate())
+        {
             int frame;
             std::string keyStr, lStickStr, rStickStr;
-            while(queueSize() < 30) {
+            while(queueSize() < 30 && !stream.eof())
+            {
                 stream >> frame >> keyStr >> lStickStr >> rStickStr;
                 struct controlMsg msg = lineAsControlMsg(frame, keyStr, lStickStr, rStickStr);
                 std::shared_ptr<struct controlMsg> sharedPtr = std::make_shared<struct controlMsg>(msg);
                 pushToQueue(sharedPtr);
+            }
+            if(stream.eof())
+            {
+                afterEOF();
             }
         }
     }
@@ -86,6 +100,16 @@ public:
 class LineFileScriptProvider: public LineStreamScriptProvider
 {
     std::ifstream stream;
+
+protected:
+    void afterEOF()
+    {
+        stream.close();
+    }
+    bool shouldPopulate()
+    {
+        return stream.is_open() && queueSize() < 15;
+    }
 
 public:
     LineFileScriptProvider(std::string fileName)
