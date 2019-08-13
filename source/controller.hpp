@@ -35,7 +35,7 @@ class TasController
 
         int currentFrame = 0;
 
-        while(provider->hasNextLine())
+        while(provider->hasNextLine() || nextLine->frame <= currentFrame)
         {
             if(nextLine->frame == currentFrame)
             {
@@ -44,11 +44,6 @@ class TasController
                 {
                     nextLine.reset();
                     nextLine = provider->nextLine();
-                }
-                else
-                {
-                    setInputNextFrame();
-                    break;
                 }
             }
             else
