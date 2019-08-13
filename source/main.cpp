@@ -157,7 +157,7 @@ int main(int argc, char* argv[])
         if(hidKeyboardDown(KBD_0))
         {
             if(controllers.size() < 8)
-                controllers.push_back(new TasController());
+                controllers.push_back(new TasController(0, 255, 255, 255, 255, 0, 0, 0, 255));
         }
 
         if(hidKeyboardDown(KBD_9))
@@ -183,6 +183,18 @@ int main(int argc, char* argv[])
             {
                 controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script0.txt");
             }
+        }
+
+        if(hidKeyboardDown(KBD_6))
+        {
+            if(controllers.size() < 8)
+                controllers.push_back(new TasController(1, 255, 255, 255, 255, 0, 0, 0, 255));
+        }
+
+        if(hidKeyboardDown(KBD_5))
+        {
+            if(controllers.size() < 8)
+                controllers.push_back(new TasController(2, 0, 0, 0, 255, 255, 255, 255, 255));
         }
 
         svcSleepThread(6250000);

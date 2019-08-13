@@ -3,14 +3,14 @@
 #include "script_provider.hpp"
 #include "script_populator.hpp"
 
-TasController::TasController()
+TasController::TasController(int controllerType, int bodyR, int bodyG, int bodyB, int bodyA, int buttonR, int buttonG, int buttonB, int buttonA)
 {
     // Device is a procon
-    device.type = BIT(0);
+    device.type = BIT(controllerType);
 
     // Colors
-    device.singleColorBody = RGBA8_MAXALPHA(61,82,242);
-    device.singleColorButtons = RGBA8_MAXALPHA(80,217,203);
+    device.singleColorBody = RGBA8(bodyR, bodyG, bodyB, bodyA);
+    device.singleColorButtons = RGBA8(buttonR, buttonG, buttonB, buttonA);
 
     // Charge is max (not working?)
     state.batteryCharge = 4;
