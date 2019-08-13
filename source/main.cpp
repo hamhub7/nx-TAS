@@ -197,6 +197,42 @@ int main(int argc, char* argv[])
                 controllers.push_back(new TasController(2, 0, 0, 0, 255, 255, 255, 255, 255));
         }
 
+        if(hidKeyboardDown(KBD_4))
+        {
+            if(controllers.size() < 8)
+                controllers.push_back(new TasController(11, 0, 0, 0, 255, 255, 255, 255, 255));
+        }
+
+        if(hidKeyboardDown(KBD_3))
+        {
+            if(controllers.size() < 8)
+                controllers.push_back(new TasController(12, 0, 0, 0, 255, 255, 255, 255, 255));
+        }
+
+        if(hidKeyboardDown(KBD_2))
+        {
+            if(controllers.size() < 8)
+                controllers.push_back(new TasController(13, 0, 0, 0, 255, 255, 255, 255, 255));
+        }
+
+        if(hidKeyboardDown(KBD_1))
+        {
+            if(controllers.size() < 8)
+                controllers.push_back(new TasController(14, 0, 0, 0, 255, 255, 255, 255, 255));
+        }
+
+        if(hidKeyboardDown(KBD_Q))
+        {
+            if(controllers.size() < 8)
+                controllers.push_back(new TasController(17, 0, 0, 0, 255, 255, 255, 255, 255));
+        }
+
+        if(hidKeyboardDown(KBD_W))
+        {
+            if(controllers.size() < 8)
+                controllers.push_back(new TasController(21, 0, 0, 0, 255, 255, 255, 255, 255));
+        }
+
         svcSleepThread(6250000);
     }
 

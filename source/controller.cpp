@@ -5,7 +5,7 @@
 
 TasController::TasController(int controllerType, int bodyR, int bodyG, int bodyB, int bodyA, int buttonR, int buttonG, int buttonB, int buttonA)
 {
-    // Device is a procon
+    // Procon(0, 4, 8-10) LeftJoy(1, 5) RightJoy(2, 6) Famicom(11) MicFamicom(12) NES1(13) NES2(14) Unk1(17) Unk2(21-23) Invalid(3, 7, 15-16, 18-20)
     device.type = BIT(controllerType);
 
     // Colors
