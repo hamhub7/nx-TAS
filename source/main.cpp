@@ -272,7 +272,7 @@ int main(int argc, char* argv[])
                 controllers.push_back(new TasController(0, 255, 255, 255, 255, 0, 0, 0, 255));
         }
 
-        if(hidKeyboardDown(KBD_2)
+        if(hidKeyboardDown(KBD_2))
         {
             if(controllers.size() < 7)
             {
