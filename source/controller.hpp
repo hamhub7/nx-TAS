@@ -37,7 +37,7 @@ class TasController
 
         int currentFrame = 0;
 
-        while(provider->hasNextLine() || nextLine->frame <= currentFrame)
+        while(provider->hasNextLine() || nextLine->frame >= currentFrame)
         {
             if(nextLine->frame == currentFrame)
             {
