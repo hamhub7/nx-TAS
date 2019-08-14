@@ -41,12 +41,46 @@ TasController::~TasController()
         fatalSimple(rc);
 }
 
-//This also resets the state of the controller after pressing so only to be used when pairing and not running a script. checker to come soon probably once scripts get implemented.
+//This also resets the state of the controller after pressing so only to be used when pairing and not running a script
 void TasController::pressA()
 {
     int frames = 0;
 
     state.buttons = KEY_A;
+
+    Result rc = hiddbgSetHdlsState(HdlsHandle, &state);
+    if(R_FAILED(rc))
+        fatalSimple(rc);
+
+    bool loopFlag = true;
+
+    while(loopFlag)
+    {
+        if(frames >= 2)
+        {
+            state.buttons = 0;
+
+            Result rc = hiddbgSetHdlsState(HdlsHandle, &state);
+            if(R_FAILED(rc))
+                fatalSimple(rc);
+
+            loopFlag = false;
+        }
+
+        Result rc = eventWait(&vsync_event, U64_MAX);
+        if(R_FAILED(rc))
+            fatalSimple(rc);
+
+        frames++;
+    }
+}
+
+//This also resets the state of the controller after pressing so only to be used when pairing and not running a script
+void TasController::pressLR()
+{
+    int frames = 0;
+
+    state.buttons = KEY_L & KEY_R;
 
     Result rc = hiddbgSetHdlsState(HdlsHandle, &state);
     if(R_FAILED(rc))

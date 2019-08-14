@@ -22,6 +22,7 @@ class TasController
     TasController();
     ~TasController();
     void pressA();
+    void pressLR();
 
     void waitForVsync();
     void setInputNextFrame();
