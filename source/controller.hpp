@@ -30,6 +30,7 @@ class TasController
     template<class T, class... Args> void runScript(Args&&... args)
     {
         auto provider = std::make_shared<T>(std::forward<Args>(args)...);
+        if(!provider->isGood()) return;
 
         provider->populateQueue();
         std::shared_ptr<struct controlMsg> nextLine = provider->nextLine();
@@ -67,6 +68,7 @@ class TasController
 
         waitForVsync();
     }
+
     void runMsg(std::shared_ptr<struct controlMsg> msg);
     void emptyMsg();
 };

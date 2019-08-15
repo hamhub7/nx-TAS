@@ -39,10 +39,10 @@ public:
         std::lock_guard<std::mutex> guard(mutex);
         return internalQueue.size();
     }
+    virtual bool isGood() { return false; };
 
     virtual std::shared_ptr<struct controlMsg> nextLine();
     virtual bool hasNextLine();
-
     virtual void populateQueue();
 
 };
@@ -65,6 +65,7 @@ public:
     : stream(mStream)
     {}
 
+    bool isGood() { return stream.good(); }
     bool hasNextLine();
     void populateQueue();
 
