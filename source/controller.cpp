@@ -12,7 +12,7 @@ TasController::TasController(int controllerType, uint8_t bodyR, uint8_t bodyG, u
     device.singleColorBody = RGBA8_MAXALPHA(bodyR, bodyG, bodyB);
     device.singleColorButtons = RGBA8_MAXALPHA(buttonR, buttonG, buttonB);
 
-    // Charge is max (not working?)
+    // Charge is max
     state.batteryCharge = 4;
 
     // Set Buttons and Joysticks
