@@ -18,7 +18,7 @@ class TasController
 
     public:
 
-    TasController(int controllerType, int bodyR, int bodyG, int bodyB, int bodyA, int buttonR, int buttonG, int buttonB, int buttonA);
+    TasController(int controllerType, uint8_t bodyR, uint8_t bodyG, uint8_t bodyB, uint8_t buttonR, uint8_t buttonG, uint8_t buttonB);
     TasController();
     ~TasController();
     void pressA();

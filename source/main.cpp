@@ -269,52 +269,52 @@ int main(int argc, char* argv[])
         if(hidKeyboardDown(KBD_1))
         {
             if(controllers.size() < 8)
-                controllers.push_back(new TasController(0, 255, 255, 255, 255, 0, 0, 0, 255));
+                controllers.push_back(new TasController(0, 255, 255, 255, 0, 0, 0));
         }
 
         if(hidKeyboardDown(KBD_2))
         {
             if(controllers.size() < 7)
             {
-                controllers.push_back(new TasController(1, 255, 255, 255, 255, 0, 0, 0, 255));
-                controllers.push_back(new TasController(2, 0, 0, 0, 255, 255, 255, 255, 255));
+                controllers.push_back(new TasController(1, 255, 255, 255, 0, 0, 0));
+                controllers.push_back(new TasController(2, 0, 0, 0, 255, 255, 255));
             }
         }
 
         if(hidKeyboardDown(KBD_3))
         {
             if(controllers.size() < 8)
-                controllers.push_back(new TasController(1, 0, 0, 0, 255, 255, 255, 255, 255));
+                controllers.push_back(new TasController(1, 0, 0, 0, 255, 255, 255));
         }
 
         if(hidKeyboardDown(KBD_4))
         {
             if(controllers.size() < 8)
-                controllers.push_back(new TasController(2, 0, 0, 0, 255, 255, 255, 255, 255));
+                controllers.push_back(new TasController(2, 0, 0, 0, 255, 255, 255));
         }
 
         if(hidKeyboardDown(KBD_5))
         {
             if(controllers.size() < 8)
-                controllers.push_back(new TasController(11, 0, 0, 0, 255, 255, 255, 255, 255));
+                controllers.push_back(new TasController(11, 0, 0, 0, 255, 255, 255));
         }
 
         if(hidKeyboardDown(KBD_6))
         {
             if(controllers.size() < 8)
-                controllers.push_back(new TasController(12, 0, 0, 0, 255, 255, 255, 255, 255));
+                controllers.push_back(new TasController(12, 0, 0, 0, 255, 255, 255));
         }
 
         if(hidKeyboardDown(KBD_7))
         {
             if(controllers.size() < 8)
-                controllers.push_back(new TasController(13, 0, 0, 0, 255, 255, 255, 255, 255));
+                controllers.push_back(new TasController(13, 0, 0, 0, 255, 255, 255));
         }
 
         if(hidKeyboardDown(KBD_8))
         {
             if(controllers.size() < 8)
-                controllers.push_back(new TasController(17, 0, 0, 0, 255, 255, 255, 255, 255));
+                controllers.push_back(new TasController(17, 0, 0, 0, 255, 255, 255));
         }
 
         if(hidKeyboardDown(KBD_MINUS))
