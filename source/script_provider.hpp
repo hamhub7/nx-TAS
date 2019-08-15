@@ -65,7 +65,11 @@ public:
     : stream(mStream)
     {}
 
-    bool isGood() { return stream.good(); }
+    bool isGood()
+    {
+        return stream.good();
+    }
+
     bool hasNextLine();
     void populateQueue();
 
@@ -89,5 +93,27 @@ public:
     LineFileScriptProvider(std::string fileName)
     : LineStreamScriptProvider(stream), stream(fileName)
     {}
+
+};
+
+class PressAProvider: public ScriptProvider
+{
+public:
+    PressAProvider()
+    {
+        pushToQueue(std::make_shared<struct controlMsg>(lineAsControlMsg(1, "KEY_A", "0;0", "0;0")));
+        pushToQueue(std::make_shared<struct controlMsg>(lineAsControlMsg(2, "KEY_A", "0;0", "0;0")));
+    }
+
+};
+
+class PressLRProvider: public ScriptProvider
+{
+public:
+    PressLRProvider()
+    {
+        pushToQueue(std::make_shared<struct controlMsg>(lineAsControlMsg(1, "KEY_L;KEY_R", "0;0", "0;0")));
+        pushToQueue(std::make_shared<struct controlMsg>(lineAsControlMsg(2, "KEY_L;KEY_R", "0;0", "0;0")));
+    }
 
 };
