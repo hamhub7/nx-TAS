@@ -105,6 +105,10 @@ public:
         pushToQueue(std::make_shared<struct controlMsg>(lineAsControlMsg(2, "KEY_A", "0;0", "0;0")));
     }
 
+    bool isGood()
+    {
+        return true;
+    }
 };
 
 class PressLRProvider: public ScriptProvider
@@ -116,4 +120,8 @@ public:
         pushToQueue(std::make_shared<struct controlMsg>(lineAsControlMsg(2, "KEY_L;KEY_R", "0;0", "0;0")));
     }
 
+    bool isGood()
+    {
+        return true;
+    }
 };
