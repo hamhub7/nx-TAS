@@ -71,8 +71,8 @@ void TasController::runMsg(std::shared_ptr<struct controlMsg> msg)
 {
     state.buttons = msg->keys;
     state.joysticks[JOYSTICK_LEFT].dx = msg->joy_l_x;
-    state.joysticks[JOYSTICK_LEFT].dy = msg->joy_r_x;
-    state.joysticks[JOYSTICK_RIGHT].dx = msg->joy_l_y;
+    state.joysticks[JOYSTICK_LEFT].dy = msg->joy_l_y;
+    state.joysticks[JOYSTICK_RIGHT].dx = msg->joy_r_x;
     state.joysticks[JOYSTICK_RIGHT].dy = msg->joy_r_y;
 }
 void TasController::emptyMsg()
