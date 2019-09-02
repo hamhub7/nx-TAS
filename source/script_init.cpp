@@ -70,20 +70,20 @@ struct controlMsg lineAsControlMsg(int frame, std::string keyStr, std::string lS
     }
     keys |= translateKey(keyStr);
 
-    //get left stick
+    // very sketchy and probably wrong way of fixing weird joysticks bug
+    
+    //get x positions
     std::size_t foundL = lStickStr.find(";");
     std::string l_x_pos = lStickStr.substr(0,foundL);
     s32 joy_l_x = static_cast<s32>(std::stoi(l_x_pos));
-    std::string l_y_pos = lStickStr.substr(foundL+1);
-    s32 joy_l_y = static_cast<s32>(std::stoi(l_y_pos));
-
-    //get right stick
-    std::size_t foundR = rStickStr.find(";");
-    std::string r_x_pos = rStickStr.substr(0,foundR);
+    std::string r_x_pos = lStickStr.substr(foundL+1);
     s32 joy_r_x = static_cast<s32>(std::stoi(r_x_pos));
+    //get y positions
+    std::size_t foundR = rStickStr.find(";");
     std::string r_y_pos = rStickStr.substr(foundR+1);
     s32 joy_r_y = static_cast<s32>(std::stoi(r_y_pos));
-
+    std::string l_y_pos = rStickStr.substr(0,foundR);
+    s32 joy_l_y = static_cast<s32>(std::stoi(l_y_pos));
 
     //deposit found values into the script
     struct controlMsg message;
