@@ -1,5 +1,5 @@
 # nx-TAS
-Rewrite of TAS-nx
+Rewrite of [TAS-nx](https://github.com/hamhub7/TAS-nx)
 
 It works fundamentally differently than TAS-nx in that it uses a virtual controller to send inputs instead for changing the inputs of the currently used controller. The program now supports multiple scripts, which can be run with the F1-F12 keys. The scrips should be placed in sdmc:/scripts/script1.txt - sdmc:/scripts/script12.txt. Keybindings have also changed to allow more controller types to be added. Q presses L+R on the controller and W presses A, useful for initially pairing the controller (not yet implemented). The minus key to the right of the 0 key subtracts the highest controller in the list (you have to press this twice to get rid of two joycons, they count as seprate controllers). The number keys all add different types of controllers to the console: 
 
