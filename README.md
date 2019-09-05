@@ -17,7 +17,7 @@ First of all, you need to have an [Atmosphere-injected Switch](https://switch.ho
 5. Reboot into CFW
 
 ### Keybinds
-You need to have a USB keyboard attached two your Switch, either via the dock or a USB-A to USB-C adapter in the charging port.
+You need to have a USB keyboard attached to your Switch, either via the dock or a USB-A to USB-C adapter in the charging port.
 
 #### Controllers
 - `1` = Pro Controller  
