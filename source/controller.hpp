@@ -42,7 +42,7 @@ class TasController
         while(provider->hasNextLine() || nextLine->frame >= currentFrame)
         {
             if(hidKeyboardDown(KBD_PAUSE)) pause = !pause;
-			if(hidKeyboardDown(KBD_SCROLLLOCK)) break;
+            if(hidKeyboardDown(KBD_SCROLLLOCK)) break;
             if(pause) continue;
             if(nextLine->frame == currentFrame)
             {
