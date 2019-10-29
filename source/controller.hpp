@@ -18,7 +18,7 @@ class TasController
 
     public:
 
-    TasController(int controllerType, uint8_t bodyR, uint8_t bodyG, uint8_t bodyB, uint8_t buttonR, uint8_t buttonG, uint8_t buttonB);
+    TasController(uint8_t deviceType, uint8_t bodyR, uint8_t bodyG, uint8_t bodyB, uint8_t buttonR, uint8_t buttonG, uint8_t buttonB);
     TasController();
     ~TasController();
     void pressA();
@@ -37,9 +37,13 @@ class TasController
         provider->populateQueue();
 
         int currentFrame = 0;
+        bool pause = false;
 
         while(provider->hasNextLine() || nextLine->frame >= currentFrame)
         {
+            if(hidKeyboardDown(KBD_PAUSE)) pause = !pause;
+			if(hidKeyboardDown(KBD_SCROLLLOCK)) break;
+            if(pause) continue;
             if(nextLine->frame == currentFrame)
             {
                 runMsg(nextLine);
