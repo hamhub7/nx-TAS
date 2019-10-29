@@ -70,6 +70,8 @@ class TasController
 
         nextLine.reset();
 
+        hidScanInput();
+
         waitForVsync();
     }
 
