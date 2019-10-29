@@ -3,14 +3,18 @@
 #include "script_provider.hpp"
 #include "script_populator.hpp"
 
-TasController::TasController(int controllerType, uint8_t bodyR, uint8_t bodyG, uint8_t bodyB, uint8_t buttonR, uint8_t buttonG, uint8_t buttonB)
+TasController::TasController(uint8_t deviceType, uint8_t bodyR, uint8_t bodyG, uint8_t bodyB, uint8_t buttonR, uint8_t buttonG, uint8_t buttonB)
 {
-    // Procon(0, 4, 8-10) LeftJoy(1, 5) RightJoy(2, 6) Famicom(11) MicFamicom(12) NES1(13) NES2(14) Unk1(17) Unk2(21-23) Invalid(3, 7, 15-16, 18-20)
-    device.type = BIT(controllerType);
+    device.deviceType = deviceType;
+	
+	// Set the interface type
+	device.npadInterfaceType = NpadInterfaceType_Bluetooth;
 
     // Colors
     device.singleColorBody = RGBA8_MAXALPHA(bodyR, bodyG, bodyB);
     device.singleColorButtons = RGBA8_MAXALPHA(buttonR, buttonG, buttonB);
+	device.colorLeftGrip = device.singleColorBody;
+	device.colorRightGrip = device.singleColorBody;
 
     // Charge is max
     state.batteryCharge = 4;
