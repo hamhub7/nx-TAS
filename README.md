@@ -39,6 +39,8 @@ You need to have a USB keyboard attached to your Switch, either via the dock or 
 #### Utilities
 - `Q` = Press L+R on the most recently added controller
 - `W` = Press A on the most recently added controller
+- `PAUSE` = Pauses and resumes execution of current script
+- `SCROLLLOCK` = Stops execution of current script
 
 ## Building from Source
 1. [Set up the required libraries](https://switchbrew.org/wiki/Setting_up_Development_Environment)
