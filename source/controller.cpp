@@ -29,12 +29,12 @@ TasController::TasController(uint8_t deviceType, uint8_t bodyR, uint8_t bodyG, u
     // Attach the controller
     Result rc = hiddbgAttachHdlsVirtualDevice(&HdlsHandle, &device);
     if (R_FAILED(rc))
-        fatalSimple(rc);
+        fatalThrow(rc);
 
     // Update the state
     rc = hiddbgSetHdlsState(HdlsHandle, &state);
     if(R_FAILED(rc))
-        fatalSimple(rc);
+        fatalThrow(rc);
 }
 
 TasController::~TasController()
@@ -42,7 +42,7 @@ TasController::~TasController()
     // Detatch Controller
     Result rc = hiddbgDetachHdlsVirtualDevice(HdlsHandle);
     if (R_FAILED(rc))
-        fatalSimple(rc);
+        fatalThrow(rc);
 }
 
 //This also resets the state of the controller after pressing so only to be used when pairing and not running a script
@@ -61,14 +61,14 @@ void TasController::waitForVsync()
 {
     Result rc = eventWait(&vsync_event, U64_MAX);
     if(R_FAILED(rc))
-        fatalSimple(rc);
+        fatalThrow(rc);
 }
 void TasController::setInputNextFrame()
 {
     waitForVsync();
     Result rc = hiddbgSetHdlsState(HdlsHandle, &state);
     if(R_FAILED(rc))
-        fatalSimple(rc);
+        fatalThrow(rc);
 }
 
 void TasController::runMsg(std::shared_ptr<struct controlMsg> msg)

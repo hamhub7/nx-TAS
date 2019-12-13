@@ -1,0 +1,31 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        },
+        {
+            "name": "DKP Aarch64",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/opt/devkitpro/libnx/include/**",
+                "/opt/devkitpro/libnx/include/switch/**"
+            ],
+            "defines": [
+                "__SWITCH__"
+            ],
+            "compilerPath": "/opt/devkitpro/devkitA64/bin/aarch64-none-elf-gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64"
+        }
+    ],
+    "version": 4
+}

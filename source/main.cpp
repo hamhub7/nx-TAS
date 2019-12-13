@@ -56,7 +56,7 @@ void __attribute__((weak)) __appInit(void)
     // Initialize default services.
     rc = smInitialize();
     if (R_FAILED(rc))
-        fatalSimple(MAKERESULT(Module_Libnx, LibnxError_InitFail_SM));
+        fatalThrow(MAKERESULT(Module_Libnx, LibnxError_InitFail_SM));
 
     rc = setsysInitialize();
     if (R_SUCCEEDED(rc)) {
@@ -70,22 +70,22 @@ void __attribute__((weak)) __appInit(void)
     // HID
     rc = hidInitialize();
     if (R_FAILED(rc))
-        fatalSimple(MAKERESULT(Module_Libnx, LibnxError_InitFail_HID));
+        fatalThrow(MAKERESULT(Module_Libnx, LibnxError_InitFail_HID));
 
     rc = fsInitialize();
     if (R_FAILED(rc))
-        fatalSimple(MAKERESULT(Module_Libnx, LibnxError_InitFail_FS));
+        fatalThrow(MAKERESULT(Module_Libnx, LibnxError_InitFail_FS));
 
     fsdevMountSdmc();
 
     rc = hiddbgInitialize();
     if (R_FAILED(rc))
-        fatalSimple(rc);
+        fatalThrow(rc);
 
     // vsync
     rc = viInitialize(ViServiceType_System);
     if(R_FAILED(rc))
-        fatalSimple(rc);
+        fatalThrow(rc);
 }
 
 void __attribute__((weak)) userAppExit(void);
@@ -106,7 +106,7 @@ void frameIncrement(void* _)
         // Wait for a new frame...
         Result rc = eventWait(&vsync_event, U64_MAX);
         if(R_FAILED(rc))
-            fatalSimple(rc);
+            fatalThrow(rc);
 
         // ... Then increment the counter
         ++frameCount;
@@ -120,11 +120,11 @@ int main(int argc, char* argv[])
     ViDisplay disp;
     Result rc = viOpenDefaultDisplay(&disp);
     if(R_FAILED(rc))
-        fatalSimple(rc);
+        fatalThrow(rc);
 
     rc = viGetDisplayVsyncEvent(&disp, &vsync_event);
     if(R_FAILED(rc))
-        fatalSimple(rc);
+        fatalThrow(rc);
 
     // Initialization code can go here.
     std::vector<TasController*> controllers;
@@ -132,7 +132,7 @@ int main(int argc, char* argv[])
     // Attach Work Buffer
     rc = hiddbgAttachHdlsWorkBuffer();
     if (R_FAILED(rc))
-        fatalSimple(rc);
+        fatalThrow(rc);
 
     // Create new thread for counting frames
     // Commented out as it was stealing vsync events from the script runner
@@ -140,10 +140,10 @@ int main(int argc, char* argv[])
     Thread countThread;
     rc = threadCreate(&countThread, frameIncrement, NULL, 0x4000, 49, 3);
     if(R_FAILED(rc))
-        fatalSimple(rc);
+        fatalThrow(rc);
     rc = threadStart(&countThread);
     if(R_FAILED(rc))
-        fatalSimple(rc);
+        fatalThrow(rc);
     */
 
     // Start thread for populating script providers

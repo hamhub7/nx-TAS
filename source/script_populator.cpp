@@ -28,12 +28,12 @@ void populateLoop(void* _)
 void startPopulatorThread()
 {
     Thread thread;
-    Result rc = threadCreate(&thread, populateLoop, NULL, 0x4000, 0x2B, -2);
+    Result rc = threadCreate(&thread, populateLoop, NULL, NULL, 0x4000, 0x2B, -2);
     if(R_FAILED(rc))
-        fatalSimple(rc);
+        fatalThrow(rc);
     rc = threadStart(&thread);
     if(R_FAILED(rc))
-        fatalSimple(rc);
+        fatalThrow(rc);
 }
 
 void pushProvider(std::shared_ptr<ScriptProvider> provider)
