@@ -4,6 +4,7 @@
 #include <string.h>
 #include <vector>
 #include <string>
+#include <map>
 
 // Include the main libnx system header, for Switch development
 #include <switch.h>
@@ -113,40 +114,45 @@ void frameIncrement(void* _)
     }
 }
 
-uint8_t bodyR, bodyG, bodyB, buttonR, buttonG, buttonB;
+class file_exception : public exception
+{
+    virtual const char* what() const throw()
+    {
+        return "File unopenable";
+    }
+} f_ex;
+
+std::map<std::string, int> params;
 void initConfig(std::string filename)
 {
     std::ifstream ifs;
-    ifs.open(filename, std::ifstream::in);
 
-    // Just using 0 as the "Invalid File" exception
     try
     {
-        if(!ifs.is_open) { throw 0; }
+        ifs.open(filename, std::ifstream::in);
+        if(!ifs.is_open) { throw f_ex; }
 
-        //FIXME: This is kinda hardcoded, might fix later
-        std::string line;
-        // Line 1: "Body Colors: 255 255 255"
-        std::getline(ifs, line);
-        size_t pos = line.find(" ");
-        std::string prefix = line.substr(0, pos);
-        if(prefix != "Body Colors:") { throw 0; }
-        line.erase(0, pos + 1);
-        for(int i = 0; i < 3; i++)
+        std::string key;
+        uint8_t value;
+        while(ifs >> key >> value)
         {
-            //TODO: Add verifier that each of these is an valid number, then write them to bodyR, bodyG, and bodyB
+            params[key] = value;
         }
-        //TODO: Add same thing, but for button colors
     }
-    catch(int e)
+    catch(const std::exception& e)
     {
         // Create the file since it doesn't exist or won't open or in the wrong format
         std::ofstream ofs;
         ofs.open("sdmc:scripts/config/config.txt", std::ofstream::out | std::ofstream::trunc);
-        ofs << "Body Colors: 255 255 255" << std::endl;
-        ofs << "Button Colors: 0 0 0" << std::endl;
+        ofs << "BodyR 255" << std::endl;
+        ofs << "BodyG 255" << std::endl;
+        ofs << "BodyB 255" << std::endl;
+        ofs << "ButtonR 0" << std::endl;
+        ofs << "ButtonG 0" << std::endl;
+        ofs << "ButtonB 0" << std::endl;
         ofs.close();
     }
+    
 }
 
 // Main program entrypoint
@@ -164,7 +170,7 @@ int main(int argc, char* argv[])
 
     // Initialization code can go here.
     std::vector<TasController*> controllers;
-    //TODO: initConfig("sdmc:/scripts/config.txt");
+    initConfig("sdmc:/scripts/config.txt");
 
     // Attach Work Buffer
     rc = hiddbgAttachHdlsWorkBuffer();
@@ -306,52 +312,52 @@ int main(int argc, char* argv[])
         if(hidKeyboardDown(KBD_1))
         {
             if(controllers.size() < 8)
-                controllers.push_back(new TasController(HidDeviceType_FullKey3, 255, 255, 255, 0, 0, 0));
+                controllers.push_back(new TasController(HidDeviceType_FullKey3, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
         }
 
         if(hidKeyboardDown(KBD_2))
         {
             if(controllers.size() < 7)
             {
-                controllers.push_back(new TasController(HidDeviceType_JoyLeft2, 255, 255, 255, 0, 0, 0));
-                controllers.push_back(new TasController(HidDeviceType_JoyRight1, 0, 0, 0, 255, 255, 255));
+                controllers.push_back(new TasController(HidDeviceType_JoyLeft2, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
+                controllers.push_back(new TasController(HidDeviceType_JoyRight1, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
             }
         }
 
         if(hidKeyboardDown(KBD_3))
         {
             if(controllers.size() < 8)
-                controllers.push_back(new TasController(HidDeviceType_JoyLeft2, 0, 0, 0, 255, 255, 255));
+                controllers.push_back(new TasController(HidDeviceType_JoyLeft2, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
         }
 
         if(hidKeyboardDown(KBD_4))
         {
             if(controllers.size() < 8)
-                controllers.push_back(new TasController(HidDeviceType_JoyRight1, 0, 0, 0, 255, 255, 255));
+                controllers.push_back(new TasController(HidDeviceType_JoyRight1, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
         }
 
         if(hidKeyboardDown(KBD_5))
         {
             if(controllers.size() < 8)
-                controllers.push_back(new TasController(HidDeviceType_LarkLeftHVC, 0, 0, 0, 255, 255, 255));
+                controllers.push_back(new TasController(HidDeviceType_LarkLeftHVC, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
         }
 
         if(hidKeyboardDown(KBD_6))
         {
             if(controllers.size() < 8)
-                controllers.push_back(new TasController(HidDeviceType_LarkRightHVC, 0, 0, 0, 255, 255, 255));
+                controllers.push_back(new TasController(HidDeviceType_LarkRightHVC, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
         }
 
         if(hidKeyboardDown(KBD_7))
         {
             if(controllers.size() < 8)
-                controllers.push_back(new TasController(HidDeviceType_LarkLeftNES, 0, 0, 0, 255, 255, 255));
+                controllers.push_back(new TasController(HidDeviceType_LarkLeftNES, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
         }
 
         if(hidKeyboardDown(KBD_8))
         {
             if(controllers.size() < 8)
-                controllers.push_back(new TasController(HidDeviceType_System19, 0, 0, 0, 255, 255, 255));
+                controllers.push_back(new TasController(HidDeviceType_System19, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
         }
 
         if(hidKeyboardDown(KBD_MINUS))
