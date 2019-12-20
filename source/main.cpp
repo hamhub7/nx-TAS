@@ -113,6 +113,42 @@ void frameIncrement(void* _)
     }
 }
 
+uint8_t bodyR, bodyG, bodyB, buttonR, buttonG, buttonB;
+void initConfig(std::string filename)
+{
+    std::ifstream ifs;
+    ifs.open(filename, std::ifstream::in);
+
+    // Just using 0 as the "Invalid File" exception
+    try
+    {
+        if(!ifs.is_open) { throw 0; }
+
+        //FIXME: This is kinda hardcoded, might fix later
+        std::string line;
+        // Line 1: "Body Colors: 255 255 255"
+        std::getline(ifs, line);
+        size_t pos = line.find(" ");
+        std::string prefix = line.substr(0, pos);
+        if(prefix != "Body Colors:") { throw 0; }
+        line.erase(0, pos + 1);
+        for(int i = 0; i < 3; i++)
+        {
+            //TODO: Add verifier that each of these is an valid number, then write them to bodyR, bodyG, and bodyB
+        }
+        //TODO: Add same thing, but for button colors
+    }
+    catch(int e)
+    {
+        // Create the file since it doesn't exist or won't open or in the wrong format
+        std::ofstream ofs;
+        ofs.open("sdmc:scripts/config/config.txt", std::ofstream::out | std::ofstream::trunc);
+        ofs << "Body Colors: 255 255 255" << std::endl;
+        ofs << "Button Colors: 0 0 0" << std::endl;
+        ofs.close();
+    }
+}
+
 // Main program entrypoint
 int main(int argc, char* argv[])
 {
@@ -128,6 +164,7 @@ int main(int argc, char* argv[])
 
     // Initialization code can go here.
     std::vector<TasController*> controllers;
+    //TODO: initConfig("sdmc:/scripts/config.txt");
 
     // Attach Work Buffer
     rc = hiddbgAttachHdlsWorkBuffer();

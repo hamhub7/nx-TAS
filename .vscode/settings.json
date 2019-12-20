@@ -48,6 +48,23 @@
         "xtree": "cpp",
         "xutility": "cpp",
         "queue": "cpp",
-        "deque": "cpp"
+        "deque": "cpp",
+        "array": "cpp",
+        "atomic": "cpp",
+        "bit": "cpp",
+        "*.tcc": "cpp",
+        "clocale": "cpp",
+        "condition_variable": "cpp",
+        "ctime": "cpp",
+        "cwctype": "cpp",
+        "unordered_map": "cpp",
+        "algorithm": "cpp",
+        "functional": "cpp",
+        "memory_resource": "cpp",
+        "numeric": "cpp",
+        "optional": "cpp",
+        "random": "cpp",
+        "string_view": "cpp",
+        "sstream": "cpp"
     }
 }
