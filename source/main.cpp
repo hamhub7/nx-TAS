@@ -114,7 +114,7 @@ void frameIncrement(void* _)
     }
 }
 
-class file_exception : public exception
+class file_exception : public std::exception
 {
     virtual const char* what() const throw()
     {
@@ -130,7 +130,7 @@ void initConfig(std::string filename)
     try
     {
         ifs.open(filename, std::ifstream::in);
-        if(!ifs.is_open) { throw f_ex; }
+        if(!ifs.is_open()) { throw f_ex; }
 
         std::string key;
         uint8_t value;
@@ -143,7 +143,7 @@ void initConfig(std::string filename)
     {
         // Create the file since it doesn't exist or won't open or in the wrong format
         std::ofstream ofs;
-        ofs.open("sdmc:scripts/config/config.txt", std::ofstream::out | std::ofstream::trunc);
+        ofs.open(filename, std::ofstream::out | std::ofstream::trunc);
         ofs << "BodyR 255" << std::endl;
         ofs << "BodyG 255" << std::endl;
         ofs << "BodyB 255" << std::endl;
@@ -312,13 +312,17 @@ int main(int argc, char* argv[])
         if(hidKeyboardDown(KBD_1))
         {
             if(controllers.size() < 8)
+            {
+                initConfig("sdmc:/scripts/config.txt");
                 controllers.push_back(new TasController(HidDeviceType_FullKey3, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
+            }
         }
 
         if(hidKeyboardDown(KBD_2))
         {
             if(controllers.size() < 7)
             {
+                initConfig("sdmc:/scripts/config.txt");
                 controllers.push_back(new TasController(HidDeviceType_JoyLeft2, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
                 controllers.push_back(new TasController(HidDeviceType_JoyRight1, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
             }
@@ -327,37 +331,55 @@ int main(int argc, char* argv[])
         if(hidKeyboardDown(KBD_3))
         {
             if(controllers.size() < 8)
+            {
+                initConfig("sdmc:/scripts/config.txt");
                 controllers.push_back(new TasController(HidDeviceType_JoyLeft2, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
+            }
         }
 
         if(hidKeyboardDown(KBD_4))
         {
             if(controllers.size() < 8)
+            {
+                initConfig("sdmc:/scripts/config.txt");
                 controllers.push_back(new TasController(HidDeviceType_JoyRight1, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
+            }
         }
 
         if(hidKeyboardDown(KBD_5))
         {
             if(controllers.size() < 8)
+            {
+                initConfig("sdmc:/scripts/config.txt");
                 controllers.push_back(new TasController(HidDeviceType_LarkLeftHVC, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
+            }
         }
 
         if(hidKeyboardDown(KBD_6))
         {
             if(controllers.size() < 8)
+            {
+                initConfig("sdmc:/scripts/config.txt");
                 controllers.push_back(new TasController(HidDeviceType_LarkRightHVC, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
+            }
         }
 
         if(hidKeyboardDown(KBD_7))
         {
             if(controllers.size() < 8)
+            {
+                initConfig("sdmc:/scripts/config.txt");
                 controllers.push_back(new TasController(HidDeviceType_LarkLeftNES, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
+            }
         }
 
         if(hidKeyboardDown(KBD_8))
         {
             if(controllers.size() < 8)
+            {
+                initConfig("sdmc:/scripts/config.txt");
                 controllers.push_back(new TasController(HidDeviceType_System19, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
+            }
         }
 
         if(hidKeyboardDown(KBD_MINUS))
