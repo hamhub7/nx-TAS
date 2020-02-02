@@ -39,8 +39,29 @@ void render(char* s);
   void visitCommand(Command *p); /* abstract class */
   void visitCAddController(CAddController *p);
   void visitCRemoveController(CRemoveController *p);
+  void visitCSetButton(CSetButton *p);
+  void visitCUnsetButton(CUnsetButton *p);
   void visitControllerType(ControllerType *p); /* abstract class */
   void visitCTProController(CTProController *p);
+  void visitColor(Color *p); /* abstract class */
+  void visitCOLRgb(COLRgb *p);
+  void visitButton(Button *p); /* abstract class */
+  void visitBButtonA(BButtonA *p);
+  void visitBButtonB(BButtonB *p);
+  void visitBButtonX(BButtonX *p);
+  void visitBButtonY(BButtonY *p);
+  void visitBBumperL(BBumperL *p);
+  void visitBBumperR(BBumperR *p);
+  void visitBBumperSL(BBumperSL *p);
+  void visitBBumperSR(BBumperSR *p);
+  void visitBTriggerZL(BTriggerZL *p);
+  void visitBTriggerZR(BTriggerZR *p);
+  void visitBDpadUp(BDpadUp *p);
+  void visitBDpadDown(BDpadDown *p);
+  void visitBDpadLeft(BDpadLeft *p);
+  void visitBDpadRight(BDpadRight *p);
+  void visitBStickLeft(BStickLeft *p);
+  void visitBStickRight(BStickRight *p);
 
   void visitInteger(Integer i);
   void visitDouble(Double d);
@@ -123,8 +144,29 @@ class ShowAbsyn : public Visitor
   void visitCommand(Command *p); /* abstract class */
   void visitCAddController(CAddController *p);
   void visitCRemoveController(CRemoveController *p);
+  void visitCSetButton(CSetButton *p);
+  void visitCUnsetButton(CUnsetButton *p);
   void visitControllerType(ControllerType *p); /* abstract class */
   void visitCTProController(CTProController *p);
+  void visitColor(Color *p); /* abstract class */
+  void visitCOLRgb(COLRgb *p);
+  void visitButton(Button *p); /* abstract class */
+  void visitBButtonA(BButtonA *p);
+  void visitBButtonB(BButtonB *p);
+  void visitBButtonX(BButtonX *p);
+  void visitBButtonY(BButtonY *p);
+  void visitBBumperL(BBumperL *p);
+  void visitBBumperR(BBumperR *p);
+  void visitBBumperSL(BBumperSL *p);
+  void visitBBumperSR(BBumperSR *p);
+  void visitBTriggerZL(BTriggerZL *p);
+  void visitBTriggerZR(BTriggerZR *p);
+  void visitBDpadUp(BDpadUp *p);
+  void visitBDpadDown(BDpadDown *p);
+  void visitBDpadLeft(BDpadLeft *p);
+  void visitBDpadRight(BDpadRight *p);
+  void visitBStickLeft(BStickLeft *p);
+  void visitBStickRight(BStickRight *p);
 
   void visitInteger(Integer i);
   void visitDouble(Double d);

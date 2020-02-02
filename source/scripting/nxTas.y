@@ -192,6 +192,72 @@ ControllerType* pControllerType(const char *str)
   }
 }
 
+static Color* YY_RESULT_Color_ = 0;
+Color* pColor(FILE *inp)
+{
+  TasScriptyy_mylinenumber = 1;
+  TasScriptinitialize_lexer(inp);
+  if (yyparse())
+  { /* Failure */
+    return 0;
+  }
+  else
+  { /* Success */
+    return YY_RESULT_Color_;
+  }
+}
+Color* pColor(const char *str)
+{
+  YY_BUFFER_STATE buf;
+  int result;
+  TasScriptyy_mylinenumber = 1;
+  TasScriptinitialize_lexer(0);
+  buf = TasScriptyy_scan_string(str);
+  result = yyparse();
+  TasScriptyy_delete_buffer(buf);
+  if (result)
+  { /* Failure */
+    return 0;
+  }
+  else
+  { /* Success */
+    return YY_RESULT_Color_;
+  }
+}
+
+static Button* YY_RESULT_Button_ = 0;
+Button* pButton(FILE *inp)
+{
+  TasScriptyy_mylinenumber = 1;
+  TasScriptinitialize_lexer(inp);
+  if (yyparse())
+  { /* Failure */
+    return 0;
+  }
+  else
+  { /* Success */
+    return YY_RESULT_Button_;
+  }
+}
+Button* pButton(const char *str)
+{
+  YY_BUFFER_STATE buf;
+  int result;
+  TasScriptyy_mylinenumber = 1;
+  TasScriptinitialize_lexer(0);
+  buf = TasScriptyy_scan_string(str);
+  result = yyparse();
+  TasScriptyy_delete_buffer(buf);
+  if (result)
+  { /* Failure */
+    return 0;
+  }
+  else
+  { /* Success */
+    return YY_RESULT_Button_;
+  }
+}
+
 
 }
 %}
@@ -207,6 +273,8 @@ ControllerType* pControllerType(const char *str)
   TasScript::Line* line_;
   TasScript::Command* command_;
   TasScript::ControllerType* controllertype_;
+  TasScript::Color* color_;
+  TasScript::Button* button_;
 }
 %name-prefix="TasScriptyy"
 %token _ERROR_
@@ -214,16 +282,41 @@ ControllerType* pControllerType(const char *str)
 
 %token TASSCRIPT__SYMB_1    //   
 %token TASSCRIPT__SYMB_2    //   + 
-%token TASSCRIPT__SYMB_3    //   - 
-%token TASSCRIPT__SYMB_4    //   pro_controller
+%token TASSCRIPT__SYMB_3    //    
+%token TASSCRIPT__SYMB_4    //   - 
+%token TASSCRIPT__SYMB_5    //   ] 
+%token TASSCRIPT__SYMB_6    //   [ 
+%token TASSCRIPT__SYMB_7    //   pro_controller 
+%token TASSCRIPT__SYMB_8    //   rgb(
+%token TASSCRIPT__SYMB_9    //   ,
+%token TASSCRIPT__SYMB_10    //   )
+%token TASSCRIPT__SYMB_11    //   A
+%token TASSCRIPT__SYMB_12    //   B
+%token TASSCRIPT__SYMB_13    //   DD
+%token TASSCRIPT__SYMB_14    //   DL
+%token TASSCRIPT__SYMB_15    //   DR
+%token TASSCRIPT__SYMB_16    //   DU
+%token TASSCRIPT__SYMB_17    //   L
+%token TASSCRIPT__SYMB_18    //   LS
+%token TASSCRIPT__SYMB_19    //   R
+%token TASSCRIPT__SYMB_20    //   RS
+%token TASSCRIPT__SYMB_21    //   SL
+%token TASSCRIPT__SYMB_22    //   SR
+%token TASSCRIPT__SYMB_23    //   X
+%token TASSCRIPT__SYMB_24    //   Y
+%token TASSCRIPT__SYMB_25    //   ZL
+%token TASSCRIPT__SYMB_26    //   ZR
 
 %type <prog_> Prog
 %type <listline_> ListLine
 %type <line_> Line
 %type <command_> Command
 %type <controllertype_> ControllerType
+%type <color_> Color
+%type <button_> Button
 
 %start Prog
+%token<int_> _INTEGER_
 %token<string_> _IDENT_
 
 %%
@@ -236,9 +329,30 @@ ListLine : /* empty */ {  $$ = new TasScript::ListLine(); TasScript::YY_RESULT_L
 Line : TASSCRIPT__SYMB_1 {  $$ = new TasScript::LEmpty(); TasScript::YY_RESULT_Line_= $$; } 
   | Command {  $$ = new TasScript::LCommand($1); TasScript::YY_RESULT_Line_= $$; }
 ;
-Command : TASSCRIPT__SYMB_2 _IDENT_ ControllerType {  $$ = new TasScript::CAddController($2, $3); TasScript::YY_RESULT_Command_= $$; } 
-  | TASSCRIPT__SYMB_3 _IDENT_ {  $$ = new TasScript::CRemoveController($2); TasScript::YY_RESULT_Command_= $$; }
+Command : TASSCRIPT__SYMB_2 _IDENT_ TASSCRIPT__SYMB_3 ControllerType {  $$ = new TasScript::CAddController($2, $4); TasScript::YY_RESULT_Command_= $$; } 
+  | TASSCRIPT__SYMB_4 _IDENT_ {  $$ = new TasScript::CRemoveController($2); TasScript::YY_RESULT_Command_= $$; }
+  | TASSCRIPT__SYMB_5 _IDENT_ TASSCRIPT__SYMB_3 Button {  $$ = new TasScript::CSetButton($2, $4); TasScript::YY_RESULT_Command_= $$; }
+  | TASSCRIPT__SYMB_6 _IDENT_ TASSCRIPT__SYMB_3 Button {  $$ = new TasScript::CUnsetButton($2, $4); TasScript::YY_RESULT_Command_= $$; }
 ;
-ControllerType : TASSCRIPT__SYMB_4 {  $$ = new TasScript::CTProController(); TasScript::YY_RESULT_ControllerType_= $$; } 
+ControllerType : TASSCRIPT__SYMB_7 Color TASSCRIPT__SYMB_3 Color TASSCRIPT__SYMB_3 Color TASSCRIPT__SYMB_3 Color {  $$ = new TasScript::CTProController($2, $4, $6, $8); TasScript::YY_RESULT_ControllerType_= $$; } 
+;
+Color : TASSCRIPT__SYMB_8 _INTEGER_ TASSCRIPT__SYMB_9 _INTEGER_ TASSCRIPT__SYMB_9 _INTEGER_ TASSCRIPT__SYMB_10 {  $$ = new TasScript::COLRgb($2, $4, $6); TasScript::YY_RESULT_Color_= $$; } 
+;
+Button : TASSCRIPT__SYMB_11 {  $$ = new TasScript::BButtonA(); TasScript::YY_RESULT_Button_= $$; } 
+  | TASSCRIPT__SYMB_12 {  $$ = new TasScript::BButtonB(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_23 {  $$ = new TasScript::BButtonX(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_24 {  $$ = new TasScript::BButtonY(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_17 {  $$ = new TasScript::BBumperL(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_19 {  $$ = new TasScript::BBumperR(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_21 {  $$ = new TasScript::BBumperSL(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_22 {  $$ = new TasScript::BBumperSR(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_25 {  $$ = new TasScript::BTriggerZL(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_26 {  $$ = new TasScript::BTriggerZR(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_16 {  $$ = new TasScript::BDpadUp(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_13 {  $$ = new TasScript::BDpadDown(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_14 {  $$ = new TasScript::BDpadLeft(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_15 {  $$ = new TasScript::BDpadRight(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_18 {  $$ = new TasScript::BStickLeft(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_20 {  $$ = new TasScript::BStickRight(); TasScript::YY_RESULT_Button_= $$; }
 ;
 

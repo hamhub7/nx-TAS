@@ -164,6 +164,7 @@ void PrintAbsyn::visitCAddController(CAddController* p)
 
   render("+ ");
   visitIdent(p->ident_);
+  render(' ');
   _i_ = 0; p->controllertype_->accept(this);
 
   if (oldi > 0) render(TASSCRIPT__R_PAREN);
@@ -184,6 +185,36 @@ void PrintAbsyn::visitCRemoveController(CRemoveController* p)
   _i_ = oldi;
 }
 
+void PrintAbsyn::visitCSetButton(CSetButton* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(TASSCRIPT__L_PAREN);
+
+  render("] ");
+  visitIdent(p->ident_);
+  render(' ');
+  _i_ = 0; p->button_->accept(this);
+
+  if (oldi > 0) render(TASSCRIPT__R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitCUnsetButton(CUnsetButton* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(TASSCRIPT__L_PAREN);
+
+  render("[ ");
+  visitIdent(p->ident_);
+  render(' ');
+  _i_ = 0; p->button_->accept(this);
+
+  if (oldi > 0) render(TASSCRIPT__R_PAREN);
+
+  _i_ = oldi;
+}
+
 void PrintAbsyn::visitControllerType(ControllerType*p) {} //abstract class
 
 void PrintAbsyn::visitCTProController(CTProController* p)
@@ -191,7 +222,228 @@ void PrintAbsyn::visitCTProController(CTProController* p)
   int oldi = _i_;
   if (oldi > 0) render(TASSCRIPT__L_PAREN);
 
-  render("pro_controller");
+  render("pro_controller ");
+  _i_ = 0; p->color_1->accept(this);
+  render(' ');
+  _i_ = 0; p->color_2->accept(this);
+  render(' ');
+  _i_ = 0; p->color_3->accept(this);
+  render(' ');
+  _i_ = 0; p->color_4->accept(this);
+
+  if (oldi > 0) render(TASSCRIPT__R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitColor(Color*p) {} //abstract class
+
+void PrintAbsyn::visitCOLRgb(COLRgb* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(TASSCRIPT__L_PAREN);
+
+  render("rgb(");
+  visitInteger(p->integer_1);
+  render(',');
+  visitInteger(p->integer_2);
+  render(',');
+  visitInteger(p->integer_3);
+  render(')');
+
+  if (oldi > 0) render(TASSCRIPT__R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitButton(Button*p) {} //abstract class
+
+void PrintAbsyn::visitBButtonA(BButtonA* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(TASSCRIPT__L_PAREN);
+
+  render('A');
+
+  if (oldi > 0) render(TASSCRIPT__R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitBButtonB(BButtonB* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(TASSCRIPT__L_PAREN);
+
+  render('B');
+
+  if (oldi > 0) render(TASSCRIPT__R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitBButtonX(BButtonX* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(TASSCRIPT__L_PAREN);
+
+  render('X');
+
+  if (oldi > 0) render(TASSCRIPT__R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitBButtonY(BButtonY* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(TASSCRIPT__L_PAREN);
+
+  render('Y');
+
+  if (oldi > 0) render(TASSCRIPT__R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitBBumperL(BBumperL* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(TASSCRIPT__L_PAREN);
+
+  render('L');
+
+  if (oldi > 0) render(TASSCRIPT__R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitBBumperR(BBumperR* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(TASSCRIPT__L_PAREN);
+
+  render('R');
+
+  if (oldi > 0) render(TASSCRIPT__R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitBBumperSL(BBumperSL* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(TASSCRIPT__L_PAREN);
+
+  render("SL");
+
+  if (oldi > 0) render(TASSCRIPT__R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitBBumperSR(BBumperSR* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(TASSCRIPT__L_PAREN);
+
+  render("SR");
+
+  if (oldi > 0) render(TASSCRIPT__R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitBTriggerZL(BTriggerZL* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(TASSCRIPT__L_PAREN);
+
+  render("ZL");
+
+  if (oldi > 0) render(TASSCRIPT__R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitBTriggerZR(BTriggerZR* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(TASSCRIPT__L_PAREN);
+
+  render("ZR");
+
+  if (oldi > 0) render(TASSCRIPT__R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitBDpadUp(BDpadUp* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(TASSCRIPT__L_PAREN);
+
+  render("DU");
+
+  if (oldi > 0) render(TASSCRIPT__R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitBDpadDown(BDpadDown* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(TASSCRIPT__L_PAREN);
+
+  render("DD");
+
+  if (oldi > 0) render(TASSCRIPT__R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitBDpadLeft(BDpadLeft* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(TASSCRIPT__L_PAREN);
+
+  render("DL");
+
+  if (oldi > 0) render(TASSCRIPT__R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitBDpadRight(BDpadRight* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(TASSCRIPT__L_PAREN);
+
+  render("DR");
+
+  if (oldi > 0) render(TASSCRIPT__R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitBStickLeft(BStickLeft* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(TASSCRIPT__L_PAREN);
+
+  render("LS");
+
+  if (oldi > 0) render(TASSCRIPT__R_PAREN);
+
+  _i_ = oldi;
+}
+
+void PrintAbsyn::visitBStickRight(BStickRight* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(TASSCRIPT__L_PAREN);
+
+  render("RS");
 
   if (oldi > 0) render(TASSCRIPT__R_PAREN);
 
@@ -302,11 +554,126 @@ void ShowAbsyn::visitCRemoveController(CRemoveController* p)
   visitIdent(p->ident_);
   bufAppend(')');
 }
+void ShowAbsyn::visitCSetButton(CSetButton* p)
+{
+  bufAppend('(');
+  bufAppend("CSetButton");
+  bufAppend(' ');
+  visitIdent(p->ident_);
+  bufAppend(' ');
+  bufAppend('[');
+  if (p->button_)  p->button_->accept(this);
+  bufAppend(']');
+  bufAppend(')');
+}
+void ShowAbsyn::visitCUnsetButton(CUnsetButton* p)
+{
+  bufAppend('(');
+  bufAppend("CUnsetButton");
+  bufAppend(' ');
+  visitIdent(p->ident_);
+  bufAppend(' ');
+  bufAppend('[');
+  if (p->button_)  p->button_->accept(this);
+  bufAppend(']');
+  bufAppend(')');
+}
 void ShowAbsyn::visitControllerType(ControllerType* p) {} //abstract class
 
 void ShowAbsyn::visitCTProController(CTProController* p)
 {
+  bufAppend('(');
   bufAppend("CTProController");
+  bufAppend(' ');
+  p->color_1->accept(this);
+  bufAppend(' ');
+  p->color_2->accept(this);
+  bufAppend(' ');
+  p->color_3->accept(this);
+  bufAppend(' ');
+  p->color_4->accept(this);
+  bufAppend(')');
+}
+void ShowAbsyn::visitColor(Color* p) {} //abstract class
+
+void ShowAbsyn::visitCOLRgb(COLRgb* p)
+{
+  bufAppend('(');
+  bufAppend("COLRgb");
+  bufAppend(' ');
+  visitInteger(p->integer_1);
+  bufAppend(' ');
+  visitInteger(p->integer_2);
+  bufAppend(' ');
+  visitInteger(p->integer_3);
+  bufAppend(' ');
+  bufAppend(')');
+}
+void ShowAbsyn::visitButton(Button* p) {} //abstract class
+
+void ShowAbsyn::visitBButtonA(BButtonA* p)
+{
+  bufAppend("BButtonA");
+}
+void ShowAbsyn::visitBButtonB(BButtonB* p)
+{
+  bufAppend("BButtonB");
+}
+void ShowAbsyn::visitBButtonX(BButtonX* p)
+{
+  bufAppend("BButtonX");
+}
+void ShowAbsyn::visitBButtonY(BButtonY* p)
+{
+  bufAppend("BButtonY");
+}
+void ShowAbsyn::visitBBumperL(BBumperL* p)
+{
+  bufAppend("BBumperL");
+}
+void ShowAbsyn::visitBBumperR(BBumperR* p)
+{
+  bufAppend("BBumperR");
+}
+void ShowAbsyn::visitBBumperSL(BBumperSL* p)
+{
+  bufAppend("BBumperSL");
+}
+void ShowAbsyn::visitBBumperSR(BBumperSR* p)
+{
+  bufAppend("BBumperSR");
+}
+void ShowAbsyn::visitBTriggerZL(BTriggerZL* p)
+{
+  bufAppend("BTriggerZL");
+}
+void ShowAbsyn::visitBTriggerZR(BTriggerZR* p)
+{
+  bufAppend("BTriggerZR");
+}
+void ShowAbsyn::visitBDpadUp(BDpadUp* p)
+{
+  bufAppend("BDpadUp");
+}
+void ShowAbsyn::visitBDpadDown(BDpadDown* p)
+{
+  bufAppend("BDpadDown");
+}
+void ShowAbsyn::visitBDpadLeft(BDpadLeft* p)
+{
+  bufAppend("BDpadLeft");
+}
+void ShowAbsyn::visitBDpadRight(BDpadRight* p)
+{
+  bufAppend("BDpadRight");
+}
+void ShowAbsyn::visitBStickLeft(BStickLeft* p)
+{
+  bufAppend("BStickLeft");
+}
+void ShowAbsyn::visitBStickRight(BStickRight* p)
+{
+  bufAppend("BStickRight");
 }
 void ShowAbsyn::visitInteger(Integer i)
 {
