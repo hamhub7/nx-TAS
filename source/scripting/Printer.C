@@ -215,6 +215,19 @@ void PrintAbsyn::visitCUnsetButton(CUnsetButton* p)
   _i_ = oldi;
 }
 
+void PrintAbsyn::visitCWait(CWait* p)
+{
+  int oldi = _i_;
+  if (oldi > 0) render(TASSCRIPT__L_PAREN);
+
+  render("! ");
+  visitInteger(p->integer_);
+
+  if (oldi > 0) render(TASSCRIPT__R_PAREN);
+
+  _i_ = oldi;
+}
+
 void PrintAbsyn::visitControllerType(ControllerType*p) {} //abstract class
 
 void PrintAbsyn::visitCTProController(CTProController* p)
@@ -576,6 +589,14 @@ void ShowAbsyn::visitCUnsetButton(CUnsetButton* p)
   bufAppend('[');
   if (p->button_)  p->button_->accept(this);
   bufAppend(']');
+  bufAppend(')');
+}
+void ShowAbsyn::visitCWait(CWait* p)
+{
+  bufAppend('(');
+  bufAppend("CWait");
+  bufAppend(' ');
+  visitInteger(p->integer_);
   bufAppend(')');
 }
 void ShowAbsyn::visitControllerType(ControllerType* p) {} //abstract class

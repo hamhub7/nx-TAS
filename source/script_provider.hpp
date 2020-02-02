@@ -5,7 +5,7 @@
 #include <thread>
 #include <mutex>
 #include <istream>
-#include "script_init.hpp"
+#include "script_util.hpp"
 
 class ScriptProvider
 {

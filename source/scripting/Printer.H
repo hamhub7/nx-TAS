@@ -41,6 +41,7 @@ void render(char* s);
   void visitCRemoveController(CRemoveController *p);
   void visitCSetButton(CSetButton *p);
   void visitCUnsetButton(CUnsetButton *p);
+  void visitCWait(CWait *p);
   void visitControllerType(ControllerType *p); /* abstract class */
   void visitCTProController(CTProController *p);
   void visitColor(Color *p); /* abstract class */
@@ -146,6 +147,7 @@ class ShowAbsyn : public Visitor
   void visitCRemoveController(CRemoveController *p);
   void visitCSetButton(CSetButton *p);
   void visitCUnsetButton(CUnsetButton *p);
+  void visitCWait(CWait *p);
   void visitControllerType(ControllerType *p); /* abstract class */
   void visitCTProController(CTProController *p);
   void visitColor(Color *p); /* abstract class */

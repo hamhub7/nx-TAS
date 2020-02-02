@@ -73,8 +73,9 @@ Button* pButton(const char *str);
 #define TASSCRIPT__SYMB_23 282
 #define TASSCRIPT__SYMB_24 283
 #define TASSCRIPT__SYMB_25 284
-#define TASSCRIPT__INTEGER_ 285
-#define TASSCRIPT__IDENT_ 286
+#define TASSCRIPT__SYMB_26 285
+#define TASSCRIPT__INTEGER_ 286
+#define TASSCRIPT__IDENT_ 287
 
 extern TasScript::YYSTYPE TasScriptyylval;
 

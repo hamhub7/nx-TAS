@@ -13,6 +13,7 @@
 #include "controller.hpp"
 #include "script_provider.hpp"
 #include "script_populator.hpp"
+#include "script_runner.hpp"
 
 // Create VSync event
 Event vsync_event;
@@ -172,6 +173,20 @@ int main(int argc, char* argv[])
     std::vector<TasController*> controllers;
     initConfig("sdmc:/scripts/config.txt");
 
+    std::map<HidKeyboardScancode, std::string> scriptKeys;
+    scriptKeys[KBD_F1] = "sdmc:/scripts/script1.txt";
+    scriptKeys[KBD_F2] = "sdmc:/scripts/script2.txt";
+    scriptKeys[KBD_F3] = "sdmc:/scripts/script3.txt";
+    scriptKeys[KBD_F4] = "sdmc:/scripts/script4.txt";
+    scriptKeys[KBD_F5] = "sdmc:/scripts/script5.txt";
+    scriptKeys[KBD_F6] = "sdmc:/scripts/script6.txt";
+    scriptKeys[KBD_F7] = "sdmc:/scripts/script7.txt";
+    scriptKeys[KBD_F8] = "sdmc:/scripts/script8.txt";
+    scriptKeys[KBD_F9] = "sdmc:/scripts/script9.txt";
+    scriptKeys[KBD_F10] = "sdmc:/scripts/script10.txt";
+    scriptKeys[KBD_F11] = "sdmc:/scripts/script11.txt";
+    scriptKeys[KBD_F12] = "sdmc:/scripts/script12.txt";
+
     // Attach Work Buffer
     rc = hiddbgAttachHdlsWorkBuffer();
     if (R_FAILED(rc))
@@ -197,197 +212,9 @@ int main(int argc, char* argv[])
     {
         hidScanInput();
 
-        if(hidKeyboardDown(KBD_F1))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script1.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F2))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script2.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F3))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script3.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F4))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script4.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F5))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script5.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F6))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script6.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F7))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script7.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F8))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script8.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F9))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script9.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F10))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script10.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F11))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script11.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F12))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script12.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_Q))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->pressLR();
-            }
-        }
-
-        if(hidKeyboardDown(KBD_W))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->pressA();
-            }
-        }
-
-        if(hidKeyboardDown(KBD_1))
-        {
-            if(controllers.size() < 8)
-            {
-                initConfig("sdmc:/scripts/config.txt");
-                controllers.push_back(new TasController(HidDeviceType_FullKey3, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
-            }
-        }
-
-        if(hidKeyboardDown(KBD_2))
-        {
-            if(controllers.size() < 7)
-            {
-                initConfig("sdmc:/scripts/config.txt");
-                controllers.push_back(new TasController(HidDeviceType_JoyLeft2, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
-                controllers.push_back(new TasController(HidDeviceType_JoyRight1, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
-            }
-        }
-
-        if(hidKeyboardDown(KBD_3))
-        {
-            if(controllers.size() < 8)
-            {
-                initConfig("sdmc:/scripts/config.txt");
-                controllers.push_back(new TasController(HidDeviceType_JoyLeft2, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
-            }
-        }
-
-        if(hidKeyboardDown(KBD_4))
-        {
-            if(controllers.size() < 8)
-            {
-                initConfig("sdmc:/scripts/config.txt");
-                controllers.push_back(new TasController(HidDeviceType_JoyRight1, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
-            }
-        }
-
-        if(hidKeyboardDown(KBD_5))
-        {
-            if(controllers.size() < 8)
-            {
-                initConfig("sdmc:/scripts/config.txt");
-                controllers.push_back(new TasController(HidDeviceType_LarkLeftHVC, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
-            }
-        }
-
-        if(hidKeyboardDown(KBD_6))
-        {
-            if(controllers.size() < 8)
-            {
-                initConfig("sdmc:/scripts/config.txt");
-                controllers.push_back(new TasController(HidDeviceType_LarkRightHVC, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
-            }
-        }
-
-        if(hidKeyboardDown(KBD_7))
-        {
-            if(controllers.size() < 8)
-            {
-                initConfig("sdmc:/scripts/config.txt");
-                controllers.push_back(new TasController(HidDeviceType_LarkLeftNES, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
-            }
-        }
-
-        if(hidKeyboardDown(KBD_8))
-        {
-            if(controllers.size() < 8)
-            {
-                initConfig("sdmc:/scripts/config.txt");
-                controllers.push_back(new TasController(HidDeviceType_System19, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
-            }
-        }
-
-        if(hidKeyboardDown(KBD_MINUS))
-        {
-            if(controllers.size() > 0)
-            {
-                delete controllers.back();
-                controllers.pop_back();
+        for(std::map<HidKeyboardScancode, std::string>::iterator it = scriptKeys.begin(); it != scriptKeys.end(); ++it) {
+            if(hidKeyboardDown(it->first)) {
+                runScript<LineFileScriptProvider>(it->second);
             }
         }
 

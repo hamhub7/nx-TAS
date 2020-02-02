@@ -74,6 +74,14 @@ void Skeleton::visitCUnsetButton(CUnsetButton *cunsetbutton)
 
 }
 
+void Skeleton::visitCWait(CWait *cwait)
+{
+  /* Code For CWait Goes Here */
+
+  visitInteger(cwait->integer_);
+
+}
+
 void Skeleton::visitCTProController(CTProController *ctprocontroller)
 {
   /* Code For CTProController Goes Here */

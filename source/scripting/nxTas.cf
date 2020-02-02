@@ -9,6 +9,7 @@ CAddController.    Command ::= "+ " Ident " " ControllerType ;
 CRemoveController. Command ::= "- " Ident ;
 CSetButton.        Command ::= "] " Ident " " Button ;
 CUnsetButton.      Command ::= "[ " Ident " " Button ;
+CWait.             Command ::= "! " Integer ;
 
 CTProController. ControllerType ::= "pro_controller " Color " " Color " " Color " " Color ;
 

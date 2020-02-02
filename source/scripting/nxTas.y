@@ -284,26 +284,27 @@ Button* pButton(const char *str)
 %token TASSCRIPT__SYMB_3    //   - 
 %token TASSCRIPT__SYMB_4    //   ] 
 %token TASSCRIPT__SYMB_5    //   [ 
-%token TASSCRIPT__SYMB_6    //   pro_controller 
-%token TASSCRIPT__SYMB_7    //   rgb(
-%token TASSCRIPT__SYMB_8    //   ,
-%token TASSCRIPT__SYMB_9    //   )
-%token TASSCRIPT__SYMB_10    //   A
-%token TASSCRIPT__SYMB_11    //   B
-%token TASSCRIPT__SYMB_12    //   DD
-%token TASSCRIPT__SYMB_13    //   DL
-%token TASSCRIPT__SYMB_14    //   DR
-%token TASSCRIPT__SYMB_15    //   DU
-%token TASSCRIPT__SYMB_16    //   L
-%token TASSCRIPT__SYMB_17    //   LS
-%token TASSCRIPT__SYMB_18    //   R
-%token TASSCRIPT__SYMB_19    //   RS
-%token TASSCRIPT__SYMB_20    //   SL
-%token TASSCRIPT__SYMB_21    //   SR
-%token TASSCRIPT__SYMB_22    //   X
-%token TASSCRIPT__SYMB_23    //   Y
-%token TASSCRIPT__SYMB_24    //   ZL
-%token TASSCRIPT__SYMB_25    //   ZR
+%token TASSCRIPT__SYMB_6    //   ! 
+%token TASSCRIPT__SYMB_7    //   pro_controller 
+%token TASSCRIPT__SYMB_8    //   rgb(
+%token TASSCRIPT__SYMB_9    //   ,
+%token TASSCRIPT__SYMB_10    //   )
+%token TASSCRIPT__SYMB_11    //   A
+%token TASSCRIPT__SYMB_12    //   B
+%token TASSCRIPT__SYMB_13    //   DD
+%token TASSCRIPT__SYMB_14    //   DL
+%token TASSCRIPT__SYMB_15    //   DR
+%token TASSCRIPT__SYMB_16    //   DU
+%token TASSCRIPT__SYMB_17    //   L
+%token TASSCRIPT__SYMB_18    //   LS
+%token TASSCRIPT__SYMB_19    //   R
+%token TASSCRIPT__SYMB_20    //   RS
+%token TASSCRIPT__SYMB_21    //   SL
+%token TASSCRIPT__SYMB_22    //   SR
+%token TASSCRIPT__SYMB_23    //   X
+%token TASSCRIPT__SYMB_24    //   Y
+%token TASSCRIPT__SYMB_25    //   ZL
+%token TASSCRIPT__SYMB_26    //   ZR
 
 %type <prog_> Prog
 %type <listline_> ListLine
@@ -330,26 +331,27 @@ Command : TASSCRIPT__SYMB_1 _IDENT_ TASSCRIPT__SYMB_2 ControllerType {  $$ = new
   | TASSCRIPT__SYMB_3 _IDENT_ {  $$ = new TasScript::CRemoveController($2); TasScript::YY_RESULT_Command_= $$; }
   | TASSCRIPT__SYMB_4 _IDENT_ TASSCRIPT__SYMB_2 Button {  $$ = new TasScript::CSetButton($2, $4); TasScript::YY_RESULT_Command_= $$; }
   | TASSCRIPT__SYMB_5 _IDENT_ TASSCRIPT__SYMB_2 Button {  $$ = new TasScript::CUnsetButton($2, $4); TasScript::YY_RESULT_Command_= $$; }
+  | TASSCRIPT__SYMB_6 _INTEGER_ {  $$ = new TasScript::CWait($2); TasScript::YY_RESULT_Command_= $$; }
 ;
-ControllerType : TASSCRIPT__SYMB_6 Color TASSCRIPT__SYMB_2 Color TASSCRIPT__SYMB_2 Color TASSCRIPT__SYMB_2 Color {  $$ = new TasScript::CTProController($2, $4, $6, $8); TasScript::YY_RESULT_ControllerType_= $$; } 
+ControllerType : TASSCRIPT__SYMB_7 Color TASSCRIPT__SYMB_2 Color TASSCRIPT__SYMB_2 Color TASSCRIPT__SYMB_2 Color {  $$ = new TasScript::CTProController($2, $4, $6, $8); TasScript::YY_RESULT_ControllerType_= $$; } 
 ;
-Color : TASSCRIPT__SYMB_7 _INTEGER_ TASSCRIPT__SYMB_8 _INTEGER_ TASSCRIPT__SYMB_8 _INTEGER_ TASSCRIPT__SYMB_9 {  $$ = new TasScript::COLRgb($2, $4, $6); TasScript::YY_RESULT_Color_= $$; } 
+Color : TASSCRIPT__SYMB_8 _INTEGER_ TASSCRIPT__SYMB_9 _INTEGER_ TASSCRIPT__SYMB_9 _INTEGER_ TASSCRIPT__SYMB_10 {  $$ = new TasScript::COLRgb($2, $4, $6); TasScript::YY_RESULT_Color_= $$; } 
 ;
-Button : TASSCRIPT__SYMB_10 {  $$ = new TasScript::BButtonA(); TasScript::YY_RESULT_Button_= $$; } 
-  | TASSCRIPT__SYMB_11 {  $$ = new TasScript::BButtonB(); TasScript::YY_RESULT_Button_= $$; }
-  | TASSCRIPT__SYMB_22 {  $$ = new TasScript::BButtonX(); TasScript::YY_RESULT_Button_= $$; }
-  | TASSCRIPT__SYMB_23 {  $$ = new TasScript::BButtonY(); TasScript::YY_RESULT_Button_= $$; }
-  | TASSCRIPT__SYMB_16 {  $$ = new TasScript::BBumperL(); TasScript::YY_RESULT_Button_= $$; }
-  | TASSCRIPT__SYMB_18 {  $$ = new TasScript::BBumperR(); TasScript::YY_RESULT_Button_= $$; }
-  | TASSCRIPT__SYMB_20 {  $$ = new TasScript::BBumperSL(); TasScript::YY_RESULT_Button_= $$; }
-  | TASSCRIPT__SYMB_21 {  $$ = new TasScript::BBumperSR(); TasScript::YY_RESULT_Button_= $$; }
-  | TASSCRIPT__SYMB_24 {  $$ = new TasScript::BTriggerZL(); TasScript::YY_RESULT_Button_= $$; }
-  | TASSCRIPT__SYMB_25 {  $$ = new TasScript::BTriggerZR(); TasScript::YY_RESULT_Button_= $$; }
-  | TASSCRIPT__SYMB_15 {  $$ = new TasScript::BDpadUp(); TasScript::YY_RESULT_Button_= $$; }
-  | TASSCRIPT__SYMB_12 {  $$ = new TasScript::BDpadDown(); TasScript::YY_RESULT_Button_= $$; }
-  | TASSCRIPT__SYMB_13 {  $$ = new TasScript::BDpadLeft(); TasScript::YY_RESULT_Button_= $$; }
-  | TASSCRIPT__SYMB_14 {  $$ = new TasScript::BDpadRight(); TasScript::YY_RESULT_Button_= $$; }
-  | TASSCRIPT__SYMB_17 {  $$ = new TasScript::BStickLeft(); TasScript::YY_RESULT_Button_= $$; }
-  | TASSCRIPT__SYMB_19 {  $$ = new TasScript::BStickRight(); TasScript::YY_RESULT_Button_= $$; }
+Button : TASSCRIPT__SYMB_11 {  $$ = new TasScript::BButtonA(); TasScript::YY_RESULT_Button_= $$; } 
+  | TASSCRIPT__SYMB_12 {  $$ = new TasScript::BButtonB(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_23 {  $$ = new TasScript::BButtonX(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_24 {  $$ = new TasScript::BButtonY(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_17 {  $$ = new TasScript::BBumperL(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_19 {  $$ = new TasScript::BBumperR(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_21 {  $$ = new TasScript::BBumperSL(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_22 {  $$ = new TasScript::BBumperSR(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_25 {  $$ = new TasScript::BTriggerZL(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_26 {  $$ = new TasScript::BTriggerZR(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_16 {  $$ = new TasScript::BDpadUp(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_13 {  $$ = new TasScript::BDpadDown(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_14 {  $$ = new TasScript::BDpadLeft(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_15 {  $$ = new TasScript::BDpadRight(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_18 {  $$ = new TasScript::BStickLeft(); TasScript::YY_RESULT_Button_= $$; }
+  | TASSCRIPT__SYMB_20 {  $$ = new TasScript::BStickRight(); TasScript::YY_RESULT_Button_= $$; }
 ;
 

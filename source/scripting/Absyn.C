@@ -318,6 +318,49 @@ CUnsetButton *CUnsetButton::clone() const
 
 
 
+/********************   CWait    ********************/
+CWait::CWait(Integer p1)
+{
+  integer_ = p1;
+
+}
+
+CWait::CWait(const CWait & other)
+{
+  integer_ = other.integer_;
+
+}
+
+CWait &CWait::operator=(const CWait & other)
+{
+  CWait tmp(other);
+  swap(tmp);
+  return *this;
+}
+
+void CWait::swap(CWait & other)
+{
+  std::swap(integer_, other.integer_);
+
+}
+
+CWait::~CWait()
+{
+
+}
+
+void CWait::accept(Visitor *v)
+{
+  v->visitCWait(this);
+}
+
+CWait *CWait::clone() const
+{
+  return new CWait(*this);
+}
+
+
+
 /********************   CTProController    ********************/
 CTProController::CTProController(Color *p1, Color *p2, Color *p3, Color *p4)
 {

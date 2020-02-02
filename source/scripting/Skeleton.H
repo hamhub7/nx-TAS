@@ -22,6 +22,7 @@ public:
   void visitCRemoveController(CRemoveController* p);
   void visitCSetButton(CSetButton* p);
   void visitCUnsetButton(CUnsetButton* p);
+  void visitCWait(CWait* p);
   void visitCTProController(CTProController* p);
   void visitCOLRgb(COLRgb* p);
   void visitBButtonA(BButtonA* p);

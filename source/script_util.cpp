@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <switch.h>
 
-#include "script_init.hpp"
+#include "script_util.hpp"
 
 std::string keyDef[] = {"KEY_A", "KEY_B", "KEY_X", "KEY_Y", "KEY_LSTICK", "KEY_RSTICK", "KEY_L", "KEY_R", "KEY_ZL", "KEY_ZR", "KEY_PLUS", "KEY_MINUS", "KEY_DLEFT", "KEY_DUP", "KEY_DRIGHT", "KEY_DDOWN"};
 

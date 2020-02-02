@@ -3,7 +3,7 @@
 #include <cstring>
 #include <string>
 #include "script_provider.hpp"
-#include "script_init.hpp"
+#include "script_util.hpp"
 
 extern Event vsync_event;
 

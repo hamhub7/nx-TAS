@@ -33,6 +33,7 @@ class CAddController;
 class CRemoveController;
 class CSetButton;
 class CUnsetButton;
+class CWait;
 class CTProController;
 class COLRgb;
 class BButtonA;
@@ -72,6 +73,7 @@ public:
   virtual void visitCRemoveController(CRemoveController *p) = 0;
   virtual void visitCSetButton(CSetButton *p) = 0;
   virtual void visitCUnsetButton(CUnsetButton *p) = 0;
+  virtual void visitCWait(CWait *p) = 0;
   virtual void visitCTProController(CTProController *p) = 0;
   virtual void visitCOLRgb(COLRgb *p) = 0;
   virtual void visitBButtonA(BButtonA *p) = 0;
@@ -254,6 +256,20 @@ public:
   virtual void accept(Visitor *v);
   virtual CUnsetButton *clone() const;
   void swap(CUnsetButton &);
+};
+
+class CWait : public Command
+{
+public:
+  Integer integer_;
+
+  CWait(const CWait &);
+  CWait &operator=(const CWait &);
+  CWait(Integer p1);
+  ~CWait();
+  virtual void accept(Visitor *v);
+  virtual CWait *clone() const;
+  void swap(CWait &);
 };
 
 class CTProController : public ControllerType
