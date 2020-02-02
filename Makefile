@@ -162,11 +162,13 @@ all: $(BUILD)
 
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
+	@cd $(SOURCES)/scripting; bnfc -p TasScript -m --cpp nxTas.cf; perl -pi -e 's/(?<!TasScript)yy/TasScriptyy/g if $$. > 20 && $$. < 25' nxTas.y; $(MAKE) --no-print-directory Lexer.C Parser.C
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
+	@cd $(SOURCES)/scripting; if test -f "Makefile"; then $(MAKE) --no-print-directory distclean; fi
 ifeq ($(strip $(APP_JSON)),)
 	@rm -fr $(BUILD) $(TARGET).nro $(TARGET).nacp $(TARGET).elf
 else
