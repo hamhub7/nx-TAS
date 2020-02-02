@@ -1,5 +1,5 @@
-P. Prog ::= [Line] ;
-separator Line "\n" ;
+P . Prog ::= [Line] ;
+separator Line "" ;
 
 LEmpty.   Line ::= "" ;
 comment "#";

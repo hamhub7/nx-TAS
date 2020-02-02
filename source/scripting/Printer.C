@@ -127,7 +127,7 @@ void PrintAbsyn::visitListLine(ListLine *listline)
   for (ListLine::const_iterator i = listline->begin() ; i != listline->end() ; ++i)
   {
     (*i)->accept(this);
-    if (i != listline->end() - 1) render('\n');
+    render("");
   }
 }void PrintAbsyn::visitLine(Line*p) {} //abstract class
 
