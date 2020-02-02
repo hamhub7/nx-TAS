@@ -45,18 +45,6 @@ TasController::~TasController()
         fatalThrow(rc);
 }
 
-//This also resets the state of the controller after pressing so only to be used when pairing and not running a script
-void TasController::pressA()
-{
-    runScript<PressAProvider>();
-}
-
-//This also resets the state of the controller after pressing so only to be used when pairing and not running a script
-void TasController::pressLR()
-{
-    runScript<PressLRProvider>();
-}
-
 void TasController::waitForVsync()
 {
     Result rc = eventWait(&vsync_event, U64_MAX);

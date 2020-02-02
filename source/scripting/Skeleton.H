@@ -9,15 +9,12 @@ namespace TasScript
 class Skeleton : public Visitor
 {
 public:
-  void visitProg(Prog* p);
   void visitLine(Line* p);
   void visitCommand(Command* p);
   void visitControllerType(ControllerType* p);
   void visitColor(Color* p);
   void visitButton(Button* p);
-  void visitP(P* p);
-  void visitLEmpty(LEmpty* p);
-  void visitLCommand(LCommand* p);
+  void visitL(L* p);
   void visitCAddController(CAddController* p);
   void visitCRemoveController(CRemoveController* p);
   void visitCSetButton(CSetButton* p);
@@ -41,7 +38,7 @@ public:
   void visitBDpadRight(BDpadRight* p);
   void visitBStickLeft(BStickLeft* p);
   void visitBStickRight(BStickRight* p);
-  void visitListLine(ListLine* p);
+  void visitListCommand(ListCommand* p);
 
   void visit"Integer"("Integer" x);
   void visit"Char"("Char" x);

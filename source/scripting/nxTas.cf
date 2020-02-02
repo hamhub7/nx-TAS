@@ -1,9 +1,7 @@
-P . Prog ::= [Line] ;
-separator Line "" ;
+comment "#" ;
+L. Line ::= [Command] ;
 
-LEmpty.   Line ::= "" ;
-comment "#";
-LCommand. Line ::= Command ;
+terminator Command ";" ;
 
 CAddController.    Command ::= "+ " Ident " " ControllerType ;
 CRemoveController. Command ::= "- " Ident ;

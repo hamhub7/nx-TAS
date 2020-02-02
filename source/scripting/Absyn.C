@@ -6,130 +6,46 @@
 #include "Absyn.H"
 namespace TasScript
 {
-/********************   P    ********************/
-P::P(ListLine *p1)
+/********************   L    ********************/
+L::L(ListCommand *p1)
 {
-  listline_ = p1;
+  listcommand_ = p1;
 
 }
 
-P::P(const P & other)
+L::L(const L & other)
 {
-  listline_ = other.listline_->clone();
+  listcommand_ = other.listcommand_->clone();
 
 }
 
-P &P::operator=(const P & other)
+L &L::operator=(const L & other)
 {
-  P tmp(other);
+  L tmp(other);
   swap(tmp);
   return *this;
 }
 
-void P::swap(P & other)
+void L::swap(L & other)
 {
-  std::swap(listline_, other.listline_);
+  std::swap(listcommand_, other.listcommand_);
 
 }
 
-P::~P()
+L::~L()
 {
-  delete(listline_);
+  delete(listcommand_);
 
 }
 
-void P::accept(Visitor *v)
+void L::accept(Visitor *v)
 {
-  v->visitP(this);
+  v->visitL(this);
 }
 
-P *P::clone() const
+L *L::clone() const
 {
-  return new P(*this);
-}
-
-
-
-/********************   LEmpty    ********************/
-LEmpty::LEmpty()
-{
-
-}
-
-LEmpty::LEmpty(const LEmpty & other)
-{
-
-}
-
-LEmpty &LEmpty::operator=(const LEmpty & other)
-{
-  LEmpty tmp(other);
-  swap(tmp);
-  return *this;
-}
-
-void LEmpty::swap(LEmpty & other)
-{
-
-}
-
-LEmpty::~LEmpty()
-{
-
-}
-
-void LEmpty::accept(Visitor *v)
-{
-  v->visitLEmpty(this);
-}
-
-LEmpty *LEmpty::clone() const
-{
-  return new LEmpty(*this);
-}
-
-
-
-/********************   LCommand    ********************/
-LCommand::LCommand(Command *p1)
-{
-  command_ = p1;
-
-}
-
-LCommand::LCommand(const LCommand & other)
-{
-  command_ = other.command_->clone();
-
-}
-
-LCommand &LCommand::operator=(const LCommand & other)
-{
-  LCommand tmp(other);
-  swap(tmp);
-  return *this;
-}
-
-void LCommand::swap(LCommand & other)
-{
-  std::swap(command_, other.command_);
-
-}
-
-LCommand::~LCommand()
-{
-  delete(command_);
-
-}
-
-void LCommand::accept(Visitor *v)
-{
-  v->visitLCommand(this);
-}
-
-LCommand *LCommand::clone() const
-{
-  return new LCommand(*this);
+  return new L(*this);
 }
 
 
@@ -1107,17 +1023,17 @@ BStickRight *BStickRight::clone() const
 
 
 
-/********************   ListLine    ********************/
+/********************   ListCommand    ********************/
 
-void ListLine::accept(Visitor *v)
+void ListCommand::accept(Visitor *v)
 {
-  v->visitListLine(this);
+  v->visitListCommand(this);
 }
 
 
-ListLine *ListLine::clone() const
+ListCommand *ListCommand::clone() const
 {
-  return new ListLine(*this);
+  return new ListCommand(*this);
 }
 
 

@@ -20,15 +20,12 @@ typedef std::string Ident;
 
 /********************   Forward Declarations    ********************/
 
-class Prog;
 class Line;
 class Command;
 class ControllerType;
 class Color;
 class Button;
-class P;
-class LEmpty;
-class LCommand;
+class L;
 class CAddController;
 class CRemoveController;
 class CSetButton;
@@ -52,7 +49,7 @@ class BDpadLeft;
 class BDpadRight;
 class BStickLeft;
 class BStickRight;
-class ListLine;
+class ListCommand;
 
 
 /********************   Visitor Interfaces    ********************/
@@ -60,15 +57,12 @@ class Visitor
 {
 public:
   virtual ~Visitor() {}
-  virtual void visitProg(Prog *p) = 0;
   virtual void visitLine(Line *p) = 0;
   virtual void visitCommand(Command *p) = 0;
   virtual void visitControllerType(ControllerType *p) = 0;
   virtual void visitColor(Color *p) = 0;
   virtual void visitButton(Button *p) = 0;
-  virtual void visitP(P *p) = 0;
-  virtual void visitLEmpty(LEmpty *p) = 0;
-  virtual void visitLCommand(LCommand *p) = 0;
+  virtual void visitL(L *p) = 0;
   virtual void visitCAddController(CAddController *p) = 0;
   virtual void visitCRemoveController(CRemoveController *p) = 0;
   virtual void visitCSetButton(CSetButton *p) = 0;
@@ -92,7 +86,7 @@ public:
   virtual void visitBDpadRight(BDpadRight *p) = 0;
   virtual void visitBStickLeft(BStickLeft *p) = 0;
   virtual void visitBStickRight(BStickRight *p) = 0;
-  virtual void visitListLine(ListLine *p) = 0;
+  virtual void visitListCommand(ListCommand *p) = 0;
 
 
   virtual void visitInteger(Integer x) = 0;
@@ -113,13 +107,6 @@ class Visitable
 
 
 /********************   Abstract Syntax Classes    ********************/
-
-class Prog : public Visitable
-{
-public:
-  virtual Prog *clone() const = 0;
-
-};
 
 class Line : public Visitable
 {
@@ -158,45 +145,18 @@ public:
 
 
 
-class P : public Prog
+class L : public Line
 {
 public:
-  ListLine *listline_;
+  ListCommand *listcommand_;
 
-  P(const P &);
-  P &operator=(const P &);
-  P(ListLine *p1);
-  ~P();
+  L(const L &);
+  L &operator=(const L &);
+  L(ListCommand *p1);
+  ~L();
   virtual void accept(Visitor *v);
-  virtual P *clone() const;
-  void swap(P &);
-};
-
-class LEmpty : public Line
-{
-public:
-
-  LEmpty(const LEmpty &);
-  LEmpty &operator=(const LEmpty &);
-  LEmpty();
-  ~LEmpty();
-  virtual void accept(Visitor *v);
-  virtual LEmpty *clone() const;
-  void swap(LEmpty &);
-};
-
-class LCommand : public Line
-{
-public:
-  Command *command_;
-
-  LCommand(const LCommand &);
-  LCommand &operator=(const LCommand &);
-  LCommand(Command *p1);
-  ~LCommand();
-  virtual void accept(Visitor *v);
-  virtual LCommand *clone() const;
-  void swap(LCommand &);
+  virtual L *clone() const;
+  void swap(L &);
 };
 
 class CAddController : public Command
@@ -515,11 +475,11 @@ public:
 
 
 
-class ListLine : public Visitable, public std::vector<Line*>
+class ListCommand : public Visitable, public std::vector<Command*>
 {
 public:
   virtual void accept(Visitor *v);
-  virtual ListLine *clone() const;
+  virtual ListCommand *clone() const;
 };
 
 

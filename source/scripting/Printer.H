@@ -30,12 +30,9 @@ void render(char* s);
   ~PrintAbsyn(void);
   char* print(Visitable* v);
 
-  void visitProg(Prog *p); /* abstract class */
-  void visitP(P *p);
-  void visitListLine(ListLine* p);
   void visitLine(Line *p); /* abstract class */
-  void visitLEmpty(LEmpty *p);
-  void visitLCommand(LCommand *p);
+  void visitL(L *p);
+  void visitListCommand(ListCommand* p);
   void visitCommand(Command *p); /* abstract class */
   void visitCAddController(CAddController *p);
   void visitCRemoveController(CRemoveController *p);
@@ -136,12 +133,9 @@ class ShowAbsyn : public Visitor
   ~ShowAbsyn(void);
   char* show(Visitable* v);
 
-  void visitProg(Prog *p); /* abstract class */
-  void visitP(P *p);
-  void visitListLine(ListLine* p);
   void visitLine(Line *p); /* abstract class */
-  void visitLEmpty(LEmpty *p);
-  void visitLCommand(LCommand *p);
+  void visitL(L *p);
+  void visitListCommand(ListCommand* p);
   void visitCommand(Command *p); /* abstract class */
   void visitCAddController(CAddController *p);
   void visitCRemoveController(CRemoveController *p);

@@ -99,72 +99,6 @@ void TasScriptyyerror(const char *str)
 
 namespace TasScript
 {
-static Prog* YY_RESULT_Prog_ = 0;
-Prog* pProg(FILE *inp)
-{
-  TasScriptyy_mylinenumber = 1;
-  TasScriptinitialize_lexer(inp);
-  if (yyparse())
-  { /* Failure */
-    return 0;
-  }
-  else
-  { /* Success */
-    return YY_RESULT_Prog_;
-  }
-}
-Prog* pProg(const char *str)
-{
-  YY_BUFFER_STATE buf;
-  int result;
-  TasScriptyy_mylinenumber = 1;
-  TasScriptinitialize_lexer(0);
-  buf = TasScriptyy_scan_string(str);
-  result = yyparse();
-  TasScriptyy_delete_buffer(buf);
-  if (result)
-  { /* Failure */
-    return 0;
-  }
-  else
-  { /* Success */
-    return YY_RESULT_Prog_;
-  }
-}
-
-static ListLine* YY_RESULT_ListLine_ = 0;
-ListLine* pListLine(FILE *inp)
-{
-  TasScriptyy_mylinenumber = 1;
-  TasScriptinitialize_lexer(inp);
-  if (yyparse())
-  { /* Failure */
-    return 0;
-  }
-  else
-  { /* Success */
-    return YY_RESULT_ListLine_;
-  }
-}
-ListLine* pListLine(const char *str)
-{
-  YY_BUFFER_STATE buf;
-  int result;
-  TasScriptyy_mylinenumber = 1;
-  TasScriptinitialize_lexer(0);
-  buf = TasScriptyy_scan_string(str);
-  result = yyparse();
-  TasScriptyy_delete_buffer(buf);
-  if (result)
-  { /* Failure */
-    return 0;
-  }
-  else
-  { /* Success */
-    return YY_RESULT_ListLine_;
-  }
-}
-
 static Line* YY_RESULT_Line_ = 0;
 Line* pLine(FILE *inp)
 {
@@ -195,6 +129,39 @@ Line* pLine(const char *str)
   else
   { /* Success */
     return YY_RESULT_Line_;
+  }
+}
+
+static ListCommand* YY_RESULT_ListCommand_ = 0;
+ListCommand* pListCommand(FILE *inp)
+{
+  TasScriptyy_mylinenumber = 1;
+  TasScriptinitialize_lexer(inp);
+  if (yyparse())
+  { /* Failure */
+    return 0;
+  }
+  else
+  { /* Success */
+    return YY_RESULT_ListCommand_;
+  }
+}
+ListCommand* pListCommand(const char *str)
+{
+  YY_BUFFER_STATE buf;
+  int result;
+  TasScriptyy_mylinenumber = 1;
+  TasScriptinitialize_lexer(0);
+  buf = TasScriptyy_scan_string(str);
+  result = yyparse();
+  TasScriptyy_delete_buffer(buf);
+  if (result)
+  { /* Failure */
+    return 0;
+  }
+  else
+  { /* Success */
+    return YY_RESULT_ListCommand_;
   }
 }
 
@@ -333,7 +300,7 @@ Button* pButton(const char *str)
 
 }
 
-#line 337 "Parser.C" /* yacc.c:339  */
+#line 304 "Parser.C" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -403,21 +370,20 @@ extern int TasScriptyydebug;
 
 union YYSTYPE
 {
-#line 266 "nxTas.y" /* yacc.c:355  */
+#line 233 "nxTas.y" /* yacc.c:355  */
 
   int int_;
   char char_;
   double double_;
   char* string_;
-  TasScript::Prog* prog_;
-  TasScript::ListLine* listline_;
   TasScript::Line* line_;
+  TasScript::ListCommand* listcommand_;
   TasScript::Command* command_;
   TasScript::ControllerType* controllertype_;
   TasScript::Color* color_;
   TasScript::Button* button_;
 
-#line 421 "Parser.C" /* yacc.c:355  */
+#line 387 "Parser.C" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -434,7 +400,7 @@ int TasScriptyyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 438 "Parser.C" /* yacc.c:358  */
+#line 404 "Parser.C" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -676,16 +642,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  3
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   51
+#define YYLAST   52
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  33
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  8
+#define YYNNTS  7
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  29
+#define YYNRULES  27
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  54
+#define YYNSTATES  53
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -734,9 +700,9 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   322,   322,   324,   325,   327,   328,   330,   331,   332,
-     333,   334,   336,   338,   340,   341,   342,   343,   344,   345,
-     346,   347,   348,   349,   350,   351,   352,   353,   354,   355
+       0,   287,   287,   289,   290,   292,   293,   294,   295,   296,
+     298,   300,   302,   303,   304,   305,   306,   307,   308,   309,
+     310,   311,   312,   313,   314,   315,   316,   317
 };
 #endif
 
@@ -755,8 +721,8 @@ static const char *const yytname[] =
   "TASSCRIPT__SYMB_19", "TASSCRIPT__SYMB_20", "TASSCRIPT__SYMB_21",
   "TASSCRIPT__SYMB_22", "TASSCRIPT__SYMB_23", "TASSCRIPT__SYMB_24",
   "TASSCRIPT__SYMB_25", "TASSCRIPT__SYMB_26", "_INTEGER_", "_IDENT_",
-  "$accept", "Prog", "ListLine", "Line", "Command", "ControllerType",
-  "Color", "Button", YY_NULLPTR
+  "$accept", "Line", "ListCommand", "Command", "ControllerType", "Color",
+  "Button", YY_NULLPTR
 };
 #endif
 
@@ -772,10 +738,10 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -28
+#define YYPACT_NINF -27
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-28)))
+  (!!((Yystate) == (-27)))
 
 #define YYTABLE_NINF -1
 
@@ -786,12 +752,12 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-     -28,    17,    18,   -28,   -28,   -14,   -13,   -11,    -3,    -1,
-     -28,   -28,    25,   -28,    26,    27,   -28,    23,   -15,   -15,
-      24,   -28,   -28,   -28,   -28,   -28,   -28,   -28,   -28,   -28,
-     -28,   -28,   -28,   -28,   -28,   -28,   -28,   -28,   -28,   -28,
-       4,    31,    28,    24,     7,    33,    29,    24,     9,    37,
-      30,    24,   -28,   -28
+     -27,    17,    18,   -27,   -14,   -13,   -11,   -10,    -2,    26,
+      25,   -27,    27,    28,   -27,   -27,    21,   -15,   -15,    23,
+     -27,   -27,   -27,   -27,   -27,   -27,   -27,   -27,   -27,   -27,
+     -27,   -27,   -27,   -27,   -27,   -27,   -27,   -27,   -27,     5,
+      31,    29,    23,     7,    33,    30,    23,     9,    35,    32,
+      23,   -27,   -27
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -799,24 +765,24 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       3,     0,     2,     1,     5,     0,     0,     0,     0,     0,
-       4,     6,     0,     8,     0,     0,    11,     0,     0,     0,
-       0,     7,    14,    15,    25,    26,    27,    24,    18,    28,
-      19,    29,    20,    21,    16,    17,    22,    23,     9,    10,
+       3,     0,     2,     1,     0,     0,     0,     0,     0,     0,
+       0,     6,     0,     0,     9,     4,     0,     0,     0,     0,
+       5,    12,    13,    23,    24,    25,    22,    16,    26,    17,
+      27,    18,    19,    14,    15,    20,    21,     7,     8,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,    13,    12
+       0,    11,    10
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -28,   -28,   -28,   -28,   -28,   -28,   -27,    32
+     -27,   -27,   -27,   -27,   -27,   -26,    34
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     1,     2,    10,    11,    21,    41,    38
+      -1,     1,     2,     9,    20,    40,    37
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -824,50 +790,50 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-      22,    23,    24,    25,    26,    27,    28,    29,    30,    31,
-      32,    33,    34,    35,    36,    37,    45,     3,    12,    13,
-      49,    14,     4,     5,    53,     6,     7,     8,     9,    15,
-      16,    17,    18,    19,    20,    42,    40,    43,    46,    47,
-      50,    44,    48,    51,    52,     0,     0,     0,     0,     0,
-       0,    39
+      21,    22,    23,    24,    25,    26,    27,    28,    29,    30,
+      31,    32,    33,    34,    35,    36,    44,     3,    10,    11,
+      48,    12,    13,     4,    52,     5,     6,     7,     8,    14,
+      15,    16,    19,    17,    18,    39,    41,    42,    45,    46,
+      49,    50,    43,    47,     0,     0,    51,     0,     0,     0,
+       0,     0,    38
 };
 
 static const yytype_int8 yycheck[] =
 {
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26,    27,    28,    29,    30,    43,     0,    32,    32,
-      47,    32,     4,     5,    51,     7,     8,     9,    10,    32,
-      31,     6,     6,     6,    11,    31,    12,     6,    31,     6,
-      31,    13,    13,     6,    14,    -1,    -1,    -1,    -1,    -1,
-      -1,    19
+      25,    26,    27,    28,    29,    30,    42,     0,    32,    32,
+      46,    32,    32,     5,    50,     7,     8,     9,    10,    31,
+       4,     6,    11,     6,     6,    12,    31,     6,    31,     6,
+      31,     6,    13,    13,    -1,    -1,    14,    -1,    -1,    -1,
+      -1,    -1,    18
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    34,    35,     0,     4,     5,     7,     8,     9,    10,
-      36,    37,    32,    32,    32,    32,    31,     6,     6,     6,
-      11,    38,    15,    16,    17,    18,    19,    20,    21,    22,
-      23,    24,    25,    26,    27,    28,    29,    30,    40,    40,
-      12,    39,    31,     6,    13,    39,    31,     6,    13,    39,
-      31,     6,    14,    39
+       0,    34,    35,     0,     5,     7,     8,     9,    10,    36,
+      32,    32,    32,    32,    31,     4,     6,     6,     6,    11,
+      37,    15,    16,    17,    18,    19,    20,    21,    22,    23,
+      24,    25,    26,    27,    28,    29,    30,    39,    39,    12,
+      38,    31,     6,    13,    38,    31,     6,    13,    38,    31,
+       6,    14,    38
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    33,    34,    35,    35,    36,    36,    37,    37,    37,
-      37,    37,    38,    39,    40,    40,    40,    40,    40,    40,
-      40,    40,    40,    40,    40,    40,    40,    40,    40,    40
+       0,    33,    34,    35,    35,    36,    36,    36,    36,    36,
+      37,    38,    39,    39,    39,    39,    39,    39,    39,    39,
+      39,    39,    39,    39,    39,    39,    39,    39
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     1,     0,     2,     1,     1,     4,     2,     4,
-       4,     2,     8,     7,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1
+       0,     2,     1,     0,     3,     4,     2,     4,     4,     2,
+       8,     7,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1
 };
 
 
@@ -1544,175 +1510,163 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 322 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.prog_) = new TasScript::P((yyvsp[0].listline_)); TasScript::YY_RESULT_Prog_= (yyval.prog_); }
-#line 1550 "Parser.C" /* yacc.c:1646  */
+#line 287 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.line_) = new TasScript::L((yyvsp[0].listcommand_)); TasScript::YY_RESULT_Line_= (yyval.line_); }
+#line 1516 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 324 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.listline_) = new TasScript::ListLine(); TasScript::YY_RESULT_ListLine_= (yyval.listline_); }
-#line 1556 "Parser.C" /* yacc.c:1646  */
+#line 289 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.listcommand_) = new TasScript::ListCommand(); TasScript::YY_RESULT_ListCommand_= (yyval.listcommand_); }
+#line 1522 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 325 "nxTas.y" /* yacc.c:1646  */
-    {  (yyvsp[-1].listline_)->push_back((yyvsp[0].line_)) ; (yyval.listline_) = (yyvsp[-1].listline_) ; TasScript::YY_RESULT_ListLine_= (yyval.listline_); }
-#line 1562 "Parser.C" /* yacc.c:1646  */
+#line 290 "nxTas.y" /* yacc.c:1646  */
+    {  (yyvsp[-2].listcommand_)->push_back((yyvsp[-1].command_)) ; (yyval.listcommand_) = (yyvsp[-2].listcommand_) ; TasScript::YY_RESULT_ListCommand_= (yyval.listcommand_); }
+#line 1528 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 327 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.line_) = new TasScript::LEmpty(); TasScript::YY_RESULT_Line_= (yyval.line_); }
-#line 1568 "Parser.C" /* yacc.c:1646  */
+#line 292 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.command_) = new TasScript::CAddController((yyvsp[-2].string_), (yyvsp[0].controllertype_)); TasScript::YY_RESULT_Command_= (yyval.command_); }
+#line 1534 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 328 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.line_) = new TasScript::LCommand((yyvsp[0].command_)); TasScript::YY_RESULT_Line_= (yyval.line_); }
-#line 1574 "Parser.C" /* yacc.c:1646  */
+#line 293 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.command_) = new TasScript::CRemoveController((yyvsp[0].string_)); TasScript::YY_RESULT_Command_= (yyval.command_); }
+#line 1540 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 330 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.command_) = new TasScript::CAddController((yyvsp[-2].string_), (yyvsp[0].controllertype_)); TasScript::YY_RESULT_Command_= (yyval.command_); }
-#line 1580 "Parser.C" /* yacc.c:1646  */
+#line 294 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.command_) = new TasScript::CSetButton((yyvsp[-2].string_), (yyvsp[0].button_)); TasScript::YY_RESULT_Command_= (yyval.command_); }
+#line 1546 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 331 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.command_) = new TasScript::CRemoveController((yyvsp[0].string_)); TasScript::YY_RESULT_Command_= (yyval.command_); }
-#line 1586 "Parser.C" /* yacc.c:1646  */
+#line 295 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.command_) = new TasScript::CUnsetButton((yyvsp[-2].string_), (yyvsp[0].button_)); TasScript::YY_RESULT_Command_= (yyval.command_); }
+#line 1552 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 332 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.command_) = new TasScript::CSetButton((yyvsp[-2].string_), (yyvsp[0].button_)); TasScript::YY_RESULT_Command_= (yyval.command_); }
-#line 1592 "Parser.C" /* yacc.c:1646  */
+#line 296 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.command_) = new TasScript::CWait((yyvsp[0].int_)); TasScript::YY_RESULT_Command_= (yyval.command_); }
+#line 1558 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 333 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.command_) = new TasScript::CUnsetButton((yyvsp[-2].string_), (yyvsp[0].button_)); TasScript::YY_RESULT_Command_= (yyval.command_); }
-#line 1598 "Parser.C" /* yacc.c:1646  */
+#line 298 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.controllertype_) = new TasScript::CTProController((yyvsp[-6].color_), (yyvsp[-4].color_), (yyvsp[-2].color_), (yyvsp[0].color_)); TasScript::YY_RESULT_ControllerType_= (yyval.controllertype_); }
+#line 1564 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 334 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.command_) = new TasScript::CWait((yyvsp[0].int_)); TasScript::YY_RESULT_Command_= (yyval.command_); }
-#line 1604 "Parser.C" /* yacc.c:1646  */
+#line 300 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.color_) = new TasScript::COLRgb((yyvsp[-5].int_), (yyvsp[-3].int_), (yyvsp[-1].int_)); TasScript::YY_RESULT_Color_= (yyval.color_); }
+#line 1570 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 336 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.controllertype_) = new TasScript::CTProController((yyvsp[-6].color_), (yyvsp[-4].color_), (yyvsp[-2].color_), (yyvsp[0].color_)); TasScript::YY_RESULT_ControllerType_= (yyval.controllertype_); }
-#line 1610 "Parser.C" /* yacc.c:1646  */
+#line 302 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.button_) = new TasScript::BButtonA(); TasScript::YY_RESULT_Button_= (yyval.button_); }
+#line 1576 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 338 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.color_) = new TasScript::COLRgb((yyvsp[-5].int_), (yyvsp[-3].int_), (yyvsp[-1].int_)); TasScript::YY_RESULT_Color_= (yyval.color_); }
-#line 1616 "Parser.C" /* yacc.c:1646  */
+#line 303 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.button_) = new TasScript::BButtonB(); TasScript::YY_RESULT_Button_= (yyval.button_); }
+#line 1582 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 340 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.button_) = new TasScript::BButtonA(); TasScript::YY_RESULT_Button_= (yyval.button_); }
-#line 1622 "Parser.C" /* yacc.c:1646  */
+#line 304 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.button_) = new TasScript::BButtonX(); TasScript::YY_RESULT_Button_= (yyval.button_); }
+#line 1588 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 341 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.button_) = new TasScript::BButtonB(); TasScript::YY_RESULT_Button_= (yyval.button_); }
-#line 1628 "Parser.C" /* yacc.c:1646  */
+#line 305 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.button_) = new TasScript::BButtonY(); TasScript::YY_RESULT_Button_= (yyval.button_); }
+#line 1594 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 342 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.button_) = new TasScript::BButtonX(); TasScript::YY_RESULT_Button_= (yyval.button_); }
-#line 1634 "Parser.C" /* yacc.c:1646  */
+#line 306 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.button_) = new TasScript::BBumperL(); TasScript::YY_RESULT_Button_= (yyval.button_); }
+#line 1600 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 343 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.button_) = new TasScript::BButtonY(); TasScript::YY_RESULT_Button_= (yyval.button_); }
-#line 1640 "Parser.C" /* yacc.c:1646  */
+#line 307 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.button_) = new TasScript::BBumperR(); TasScript::YY_RESULT_Button_= (yyval.button_); }
+#line 1606 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 344 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.button_) = new TasScript::BBumperL(); TasScript::YY_RESULT_Button_= (yyval.button_); }
-#line 1646 "Parser.C" /* yacc.c:1646  */
+#line 308 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.button_) = new TasScript::BBumperSL(); TasScript::YY_RESULT_Button_= (yyval.button_); }
+#line 1612 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 345 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.button_) = new TasScript::BBumperR(); TasScript::YY_RESULT_Button_= (yyval.button_); }
-#line 1652 "Parser.C" /* yacc.c:1646  */
+#line 309 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.button_) = new TasScript::BBumperSR(); TasScript::YY_RESULT_Button_= (yyval.button_); }
+#line 1618 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 346 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.button_) = new TasScript::BBumperSL(); TasScript::YY_RESULT_Button_= (yyval.button_); }
-#line 1658 "Parser.C" /* yacc.c:1646  */
+#line 310 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.button_) = new TasScript::BTriggerZL(); TasScript::YY_RESULT_Button_= (yyval.button_); }
+#line 1624 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 347 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.button_) = new TasScript::BBumperSR(); TasScript::YY_RESULT_Button_= (yyval.button_); }
-#line 1664 "Parser.C" /* yacc.c:1646  */
+#line 311 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.button_) = new TasScript::BTriggerZR(); TasScript::YY_RESULT_Button_= (yyval.button_); }
+#line 1630 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 348 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.button_) = new TasScript::BTriggerZL(); TasScript::YY_RESULT_Button_= (yyval.button_); }
-#line 1670 "Parser.C" /* yacc.c:1646  */
+#line 312 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.button_) = new TasScript::BDpadUp(); TasScript::YY_RESULT_Button_= (yyval.button_); }
+#line 1636 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 349 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.button_) = new TasScript::BTriggerZR(); TasScript::YY_RESULT_Button_= (yyval.button_); }
-#line 1676 "Parser.C" /* yacc.c:1646  */
+#line 313 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.button_) = new TasScript::BDpadDown(); TasScript::YY_RESULT_Button_= (yyval.button_); }
+#line 1642 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 350 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.button_) = new TasScript::BDpadUp(); TasScript::YY_RESULT_Button_= (yyval.button_); }
-#line 1682 "Parser.C" /* yacc.c:1646  */
+#line 314 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.button_) = new TasScript::BDpadLeft(); TasScript::YY_RESULT_Button_= (yyval.button_); }
+#line 1648 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 351 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.button_) = new TasScript::BDpadDown(); TasScript::YY_RESULT_Button_= (yyval.button_); }
-#line 1688 "Parser.C" /* yacc.c:1646  */
+#line 315 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.button_) = new TasScript::BDpadRight(); TasScript::YY_RESULT_Button_= (yyval.button_); }
+#line 1654 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 352 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.button_) = new TasScript::BDpadLeft(); TasScript::YY_RESULT_Button_= (yyval.button_); }
-#line 1694 "Parser.C" /* yacc.c:1646  */
+#line 316 "nxTas.y" /* yacc.c:1646  */
+    {  (yyval.button_) = new TasScript::BStickLeft(); TasScript::YY_RESULT_Button_= (yyval.button_); }
+#line 1660 "Parser.C" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 353 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.button_) = new TasScript::BDpadRight(); TasScript::YY_RESULT_Button_= (yyval.button_); }
-#line 1700 "Parser.C" /* yacc.c:1646  */
-    break;
-
-  case 28:
-#line 354 "nxTas.y" /* yacc.c:1646  */
-    {  (yyval.button_) = new TasScript::BStickLeft(); TasScript::YY_RESULT_Button_= (yyval.button_); }
-#line 1706 "Parser.C" /* yacc.c:1646  */
-    break;
-
-  case 29:
-#line 355 "nxTas.y" /* yacc.c:1646  */
+#line 317 "nxTas.y" /* yacc.c:1646  */
     {  (yyval.button_) = new TasScript::BStickRight(); TasScript::YY_RESULT_Button_= (yyval.button_); }
-#line 1712 "Parser.C" /* yacc.c:1646  */
+#line 1666 "Parser.C" /* yacc.c:1646  */
     break;
 
 
-#line 1716 "Parser.C" /* yacc.c:1646  */
+#line 1670 "Parser.C" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

@@ -1,10 +1,12 @@
-#include <cstring>
+#include <string>
 #include <cstdlib>
 #include "script_util.hpp"
 
 #include "script_provider.hpp"
+#include "scripting/Absyn.H"
+#include "scripting/Parser.H"
 
-std::shared_ptr<struct controlMsg> ScriptProvider::nextLine()
+std::shared_ptr<TasScript::Command> ScriptProvider::nextLine()
 {
     return pullFromQueue();
 }
@@ -23,14 +25,12 @@ void LineStreamScriptProvider::populateQueue()
 {
     if(shouldPopulate())
     {
-        int frame;
-        std::string keyStr, lStickStr, rStickStr;
+        std::string line = "";
         while(queueSize() < 30 && !stream.eof())
         {
-            stream >> frame >> keyStr >> lStickStr >> rStickStr;
-            struct controlMsg msg = lineAsControlMsg(frame, keyStr, lStickStr, rStickStr);
-            std::shared_ptr<struct controlMsg> sharedPtr = std::make_shared<struct controlMsg>(msg);
-            pushToQueue(sharedPtr);
+            std::getline(stream, line);
+            TasScript::ListCommand lineCmds = TasScript::pListCommand(line.c_str());
+            std::for_each(lineCmds.begin(), lineCmds.end(), makeSharedAndPush);
         }
         if(stream.eof())
         {

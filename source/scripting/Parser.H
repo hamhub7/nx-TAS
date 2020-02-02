@@ -6,9 +6,8 @@
 
 namespace TasScript
 {
-class Prog;
-class ListLine;
 class Line;
+class ListCommand;
 class Command;
 class ControllerType;
 class Color;
@@ -20,21 +19,18 @@ typedef union
   char char_;
   double double_;
   char* string_;
-  Prog* prog_;
-  ListLine* listline_;
   Line* line_;
+  ListCommand* listcommand_;
   Command* command_;
   ControllerType* controllertype_;
   Color* color_;
   Button* button_;
 } YYSTYPE;
 
-Prog* pProg(FILE *inp);
-Prog* pProg(const char *str);
-ListLine* pListLine(FILE *inp);
-ListLine* pListLine(const char *str);
 Line* pLine(FILE *inp);
 Line* pLine(const char *str);
+ListCommand* pListCommand(FILE *inp);
+ListCommand* pListCommand(const char *str);
 Command* pCommand(FILE *inp);
 Command* pCommand(const char *str);
 ControllerType* pControllerType(FILE *inp);

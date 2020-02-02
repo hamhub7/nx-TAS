@@ -23,7 +23,7 @@ int main(int argc, char ** argv)
   }
   else input = stdin;
   /* The default entry point is used. For other options see Parser.H */
-  TasScript::Prog *parse_tree = TasScript::pProg(input);
+  TasScript::Line *parse_tree = TasScript::pLine(input);
   if (parse_tree)
   {
     printf("\nParse Succesful!\n");

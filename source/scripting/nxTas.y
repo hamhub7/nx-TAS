@@ -27,72 +27,6 @@ void TasScriptyyerror(const char *str)
 
 namespace TasScript
 {
-static Prog* YY_RESULT_Prog_ = 0;
-Prog* pProg(FILE *inp)
-{
-  TasScriptyy_mylinenumber = 1;
-  TasScriptinitialize_lexer(inp);
-  if (yyparse())
-  { /* Failure */
-    return 0;
-  }
-  else
-  { /* Success */
-    return YY_RESULT_Prog_;
-  }
-}
-Prog* pProg(const char *str)
-{
-  YY_BUFFER_STATE buf;
-  int result;
-  TasScriptyy_mylinenumber = 1;
-  TasScriptinitialize_lexer(0);
-  buf = TasScriptyy_scan_string(str);
-  result = yyparse();
-  TasScriptyy_delete_buffer(buf);
-  if (result)
-  { /* Failure */
-    return 0;
-  }
-  else
-  { /* Success */
-    return YY_RESULT_Prog_;
-  }
-}
-
-static ListLine* YY_RESULT_ListLine_ = 0;
-ListLine* pListLine(FILE *inp)
-{
-  TasScriptyy_mylinenumber = 1;
-  TasScriptinitialize_lexer(inp);
-  if (yyparse())
-  { /* Failure */
-    return 0;
-  }
-  else
-  { /* Success */
-    return YY_RESULT_ListLine_;
-  }
-}
-ListLine* pListLine(const char *str)
-{
-  YY_BUFFER_STATE buf;
-  int result;
-  TasScriptyy_mylinenumber = 1;
-  TasScriptinitialize_lexer(0);
-  buf = TasScriptyy_scan_string(str);
-  result = yyparse();
-  TasScriptyy_delete_buffer(buf);
-  if (result)
-  { /* Failure */
-    return 0;
-  }
-  else
-  { /* Success */
-    return YY_RESULT_ListLine_;
-  }
-}
-
 static Line* YY_RESULT_Line_ = 0;
 Line* pLine(FILE *inp)
 {
@@ -123,6 +57,39 @@ Line* pLine(const char *str)
   else
   { /* Success */
     return YY_RESULT_Line_;
+  }
+}
+
+static ListCommand* YY_RESULT_ListCommand_ = 0;
+ListCommand* pListCommand(FILE *inp)
+{
+  TasScriptyy_mylinenumber = 1;
+  TasScriptinitialize_lexer(inp);
+  if (yyparse())
+  { /* Failure */
+    return 0;
+  }
+  else
+  { /* Success */
+    return YY_RESULT_ListCommand_;
+  }
+}
+ListCommand* pListCommand(const char *str)
+{
+  YY_BUFFER_STATE buf;
+  int result;
+  TasScriptyy_mylinenumber = 1;
+  TasScriptinitialize_lexer(0);
+  buf = TasScriptyy_scan_string(str);
+  result = yyparse();
+  TasScriptyy_delete_buffer(buf);
+  if (result)
+  { /* Failure */
+    return 0;
+  }
+  else
+  { /* Success */
+    return YY_RESULT_ListCommand_;
   }
 }
 
@@ -268,9 +235,8 @@ Button* pButton(const char *str)
   char char_;
   double double_;
   char* string_;
-  TasScript::Prog* prog_;
-  TasScript::ListLine* listline_;
   TasScript::Line* line_;
+  TasScript::ListCommand* listcommand_;
   TasScript::Command* command_;
   TasScript::ControllerType* controllertype_;
   TasScript::Color* color_;
@@ -278,7 +244,7 @@ Button* pButton(const char *str)
 }
 %name-prefix="TasScriptyy"
 %token _ERROR_
-%token TASSCRIPT__SYMB_0    //   
+%token TASSCRIPT__SYMB_0    //   ;
 %token TASSCRIPT__SYMB_1    //   + 
 %token TASSCRIPT__SYMB_2    //    
 %token TASSCRIPT__SYMB_3    //   - 
@@ -306,26 +272,22 @@ Button* pButton(const char *str)
 %token TASSCRIPT__SYMB_25    //   ZL
 %token TASSCRIPT__SYMB_26    //   ZR
 
-%type <prog_> Prog
-%type <listline_> ListLine
 %type <line_> Line
+%type <listcommand_> ListCommand
 %type <command_> Command
 %type <controllertype_> ControllerType
 %type <color_> Color
 %type <button_> Button
 
-%start Prog
+%start Line
 %token<int_> _INTEGER_
 %token<string_> _IDENT_
 
 %%
-Prog : ListLine {  $$ = new TasScript::P($1); TasScript::YY_RESULT_Prog_= $$; } 
+Line : ListCommand {  $$ = new TasScript::L($1); TasScript::YY_RESULT_Line_= $$; } 
 ;
-ListLine : /* empty */ {  $$ = new TasScript::ListLine(); TasScript::YY_RESULT_ListLine_= $$; } 
-  | ListLine Line {  $1->push_back($2) ; $$ = $1 ; TasScript::YY_RESULT_ListLine_= $$; }
-;
-Line : TASSCRIPT__SYMB_0 {  $$ = new TasScript::LEmpty(); TasScript::YY_RESULT_Line_= $$; } 
-  | Command {  $$ = new TasScript::LCommand($1); TasScript::YY_RESULT_Line_= $$; }
+ListCommand : /* empty */ {  $$ = new TasScript::ListCommand(); TasScript::YY_RESULT_ListCommand_= $$; } 
+  | ListCommand Command TASSCRIPT__SYMB_0 {  $1->push_back($2) ; $$ = $1 ; TasScript::YY_RESULT_ListCommand_= $$; }
 ;
 Command : TASSCRIPT__SYMB_1 _IDENT_ TASSCRIPT__SYMB_2 ControllerType {  $$ = new TasScript::CAddController($2, $4); TasScript::YY_RESULT_Command_= $$; } 
   | TASSCRIPT__SYMB_3 _IDENT_ {  $$ = new TasScript::CRemoveController($2); TasScript::YY_RESULT_Command_= $$; }

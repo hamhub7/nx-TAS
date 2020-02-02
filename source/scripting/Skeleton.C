@@ -9,33 +9,17 @@
 
 namespace TasScript
 {
-void Skeleton::visitProg(Prog* t) {} //abstract class
 void Skeleton::visitLine(Line* t) {} //abstract class
 void Skeleton::visitCommand(Command* t) {} //abstract class
 void Skeleton::visitControllerType(ControllerType* t) {} //abstract class
 void Skeleton::visitColor(Color* t) {} //abstract class
 void Skeleton::visitButton(Button* t) {} //abstract class
 
-void Skeleton::visitP(P *p)
+void Skeleton::visitL(L *l)
 {
-  /* Code For P Goes Here */
+  /* Code For L Goes Here */
 
-  p->listline_->accept(this);
-
-}
-
-void Skeleton::visitLEmpty(LEmpty *lempty)
-{
-  /* Code For LEmpty Goes Here */
-
-
-}
-
-void Skeleton::visitLCommand(LCommand *lcommand)
-{
-  /* Code For LCommand Goes Here */
-
-  lcommand->command_->accept(this);
+  l->listcommand_->accept(this);
 
 }
 
@@ -216,9 +200,9 @@ void Skeleton::visitBStickRight(BStickRight *bstickright)
 }
 
 
-void Skeleton::visitListLine(ListLine* listline)
+void Skeleton::visitListCommand(ListCommand* listcommand)
 {
-  for (ListLine::iterator i = listline->begin() ; i != listline->end() ; ++i)
+  for (ListCommand::iterator i = listcommand->begin() ; i != listcommand->end() ; ++i)
   {
     (*i)->accept(this);
   }

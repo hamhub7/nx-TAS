@@ -109,53 +109,27 @@ char* PrintAbsyn::print(Visitable *v)
   v->accept(this);
   return buf_;
 }
-void PrintAbsyn::visitProg(Prog*p) {} //abstract class
+void PrintAbsyn::visitLine(Line*p) {} //abstract class
 
-void PrintAbsyn::visitP(P* p)
+void PrintAbsyn::visitL(L* p)
 {
   int oldi = _i_;
   if (oldi > 0) render(TASSCRIPT__L_PAREN);
 
-  if(p->listline_) {_i_ = 0; p->listline_->accept(this);}
+  if(p->listcommand_) {_i_ = 0; p->listcommand_->accept(this);}
   if (oldi > 0) render(TASSCRIPT__R_PAREN);
 
   _i_ = oldi;
 }
 
-void PrintAbsyn::visitListLine(ListLine *listline)
+void PrintAbsyn::visitListCommand(ListCommand *listcommand)
 {
-  for (ListLine::const_iterator i = listline->begin() ; i != listline->end() ; ++i)
+  for (ListCommand::const_iterator i = listcommand->begin() ; i != listcommand->end() ; ++i)
   {
     (*i)->accept(this);
-    render("");
+    render(';');
   }
-}void PrintAbsyn::visitLine(Line*p) {} //abstract class
-
-void PrintAbsyn::visitLEmpty(LEmpty* p)
-{
-  int oldi = _i_;
-  if (oldi > 0) render(TASSCRIPT__L_PAREN);
-
-  render("");
-
-  if (oldi > 0) render(TASSCRIPT__R_PAREN);
-
-  _i_ = oldi;
-}
-
-void PrintAbsyn::visitLCommand(LCommand* p)
-{
-  int oldi = _i_;
-  if (oldi > 0) render(TASSCRIPT__L_PAREN);
-
-  _i_ = 0; p->command_->accept(this);
-
-  if (oldi > 0) render(TASSCRIPT__R_PAREN);
-
-  _i_ = oldi;
-}
-
-void PrintAbsyn::visitCommand(Command*p) {} //abstract class
+}void PrintAbsyn::visitCommand(Command*p) {} //abstract class
 
 void PrintAbsyn::visitCAddController(CAddController* p)
 {
@@ -508,43 +482,27 @@ char* ShowAbsyn::show(Visitable *v)
   v->accept(this);
   return buf_;
 }
-void ShowAbsyn::visitProg(Prog* p) {} //abstract class
+void ShowAbsyn::visitLine(Line* p) {} //abstract class
 
-void ShowAbsyn::visitP(P* p)
+void ShowAbsyn::visitL(L* p)
 {
   bufAppend('(');
-  bufAppend("P");
+  bufAppend("L");
   bufAppend(' ');
   bufAppend('[');
-  if (p->listline_)  p->listline_->accept(this);
+  if (p->listcommand_)  p->listcommand_->accept(this);
   bufAppend(']');
   bufAppend(')');
 }
-void ShowAbsyn::visitListLine(ListLine *listline)
+void ShowAbsyn::visitListCommand(ListCommand *listcommand)
 {
-  for (ListLine::const_iterator i = listline->begin() ; i != listline->end() ; ++i)
+  for (ListCommand::const_iterator i = listcommand->begin() ; i != listcommand->end() ; ++i)
   {
     (*i)->accept(this);
-    if (i != listline->end() - 1) bufAppend(", ");
+    if (i != listcommand->end() - 1) bufAppend(", ");
   }
 }
 
-void ShowAbsyn::visitLine(Line* p) {} //abstract class
-
-void ShowAbsyn::visitLEmpty(LEmpty* p)
-{
-  bufAppend("LEmpty");
-}
-void ShowAbsyn::visitLCommand(LCommand* p)
-{
-  bufAppend('(');
-  bufAppend("LCommand");
-  bufAppend(' ');
-  bufAppend('[');
-  if (p->command_)  p->command_->accept(this);
-  bufAppend(']');
-  bufAppend(')');
-}
 void ShowAbsyn::visitCommand(Command* p) {} //abstract class
 
 void ShowAbsyn::visitCAddController(CAddController* p)

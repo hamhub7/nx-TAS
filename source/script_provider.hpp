@@ -6,24 +6,30 @@
 #include <mutex>
 #include <istream>
 #include "script_util.hpp"
+#include "scripting/Absyn.H"
 
 class ScriptProvider
 {
 private:
     mutable std::mutex mutex;
-    std::queue<std::shared_ptr<struct controlMsg>> internalQueue;
+    std::queue<std::shared_ptr<TasScript::Command>> internalQueue;
 
 protected:
-    void pushToQueue(std::shared_ptr<struct controlMsg> msg)
+    void pushToQueue(std::shared_ptr<TasScript::Command> msg)
     {
         std::lock_guard<std::mutex> guard(mutex);
         return internalQueue.push(msg);
     }
 
-    std::shared_ptr<struct controlMsg> pullFromQueue()
+    void makeSharedAndPush(TasScript::Command* cmd)
+    {
+        pushToQueue(std::make_shared<TasScript::Command>(cmd));
+    }
+
+    std::shared_ptr<TasScript::Command> pullFromQueue()
     {
         std::lock_guard<std::mutex> guard(mutex);
-        std::shared_ptr<struct controlMsg> msg = internalQueue.front();
+        std::shared_ptr<TasScript::Command> msg = internalQueue.front();
         internalQueue.pop();
         return msg;
     }
@@ -41,7 +47,7 @@ public:
     }
     virtual bool isGood() { return false; };
 
-    virtual std::shared_ptr<struct controlMsg> nextLine();
+    virtual std::shared_ptr<TasScript::Command> nextLine();
     virtual bool hasNextLine();
     virtual void populateQueue();
 
@@ -94,34 +100,4 @@ public:
     : LineStreamScriptProvider(stream), stream(fileName)
     {}
 
-};
-
-class PressAProvider: public ScriptProvider
-{
-public:
-    PressAProvider()
-    {
-        pushToQueue(std::make_shared<struct controlMsg>(lineAsControlMsg(1, "KEY_A", "0;0", "0;0")));
-        pushToQueue(std::make_shared<struct controlMsg>(lineAsControlMsg(2, "KEY_A", "0;0", "0;0")));
-    }
-
-    bool isGood()
-    {
-        return true;
-    }
-};
-
-class PressLRProvider: public ScriptProvider
-{
-public:
-    PressLRProvider()
-    {
-        pushToQueue(std::make_shared<struct controlMsg>(lineAsControlMsg(1, "KEY_L;KEY_R", "0;0", "0;0")));
-        pushToQueue(std::make_shared<struct controlMsg>(lineAsControlMsg(2, "KEY_L;KEY_R", "0;0", "0;0")));
-    }
-
-    bool isGood()
-    {
-        return true;
-    }
 };
