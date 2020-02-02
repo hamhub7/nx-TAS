@@ -6,7 +6,7 @@
 #include <mutex>
 #include <istream>
 #include "script_util.hpp"
-#include "scripting/Absyn.H"
+#include "Absyn.H"
 
 class ScriptProvider
 {
@@ -19,11 +19,6 @@ protected:
     {
         std::lock_guard<std::mutex> guard(mutex);
         return internalQueue.push(msg);
-    }
-
-    void makeSharedAndPush(TasScript::Command* cmd)
-    {
-        pushToQueue(std::make_shared<TasScript::Command>(cmd));
     }
 
     std::shared_ptr<TasScript::Command> pullFromQueue()

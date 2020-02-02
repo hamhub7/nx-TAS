@@ -9,3 +9,9 @@ nx-TAS.nsp
 *~
 \#*\#
 *.bak
+
+nxTas.l
+nxTas.y
+*.C
+*.H
+source/Makefile
