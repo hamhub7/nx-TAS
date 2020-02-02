@@ -5,3 +5,7 @@ nx-TAS.nsp
 /build
 .DS_Store
 /release
+
+*~
+\#*\#
+*.bak
