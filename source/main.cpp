@@ -170,7 +170,6 @@ int main(int argc, char* argv[])
         fatalThrow(rc);
 
     // Initialization code can go here.
-    std::vector<TasController*> controllers;
     initConfig("sdmc:/scripts/config.txt");
 
     std::map<HidKeyboardScancode, std::string> scriptKeys;

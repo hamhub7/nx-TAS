@@ -42,8 +42,8 @@ public:
     }
     virtual bool isGood() { return false; };
 
-    virtual std::shared_ptr<TasScript::Command> nextLine();
-    virtual bool hasNextLine();
+    virtual std::shared_ptr<TasScript::Command> nextCommand();
+    virtual bool hasNextCommand();
     virtual void populateQueue();
 
 };
@@ -71,7 +71,7 @@ public:
         return stream.good();
     }
 
-    bool hasNextLine();
+    bool hasNextCommand();
     void populateQueue();
 
 };

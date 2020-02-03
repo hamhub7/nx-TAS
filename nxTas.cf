@@ -1,13 +1,14 @@
 comment "#" ;
 L. Line ::= [Command] ;
 
-terminator Command ";" ;
+separator Command ";" ;
 
 CAddController.    Command ::= "+ " Ident " " ControllerType ;
 CRemoveController. Command ::= "- " Ident ;
 CSetButton.        Command ::= "] " Ident " " Button ;
 CUnsetButton.      Command ::= "[ " Ident " " Button ;
 CWait.             Command ::= "! " Integer ;
+CImport.           Command ::= "$ " String ;
 
 CTProController. ControllerType ::= "pro_controller " Color " " Color " " Color " " Color ;
 

@@ -18,7 +18,7 @@ class TasController
 
     public:
 
-    TasController(uint8_t deviceType, uint8_t bodyR, uint8_t bodyG, uint8_t bodyB, uint8_t buttonR, uint8_t buttonG, uint8_t buttonB);
+    TasController(uint8_t deviceType, uint8_t bodyR, uint8_t bodyG, uint8_t bodyB, uint8_t buttonR, uint8_t buttonG, uint8_t buttonB, uint8_t leftgripR, uint8_t leftgripG, uint8_t leftgripB, uint8_t rightgripR, uint8_t rightgripG, uint8_t rightgripB);
     TasController();
     ~TasController();
     void pressA();
@@ -77,4 +77,59 @@ class TasController
 
     void runMsg(std::shared_ptr<struct controlMsg> msg);
     void emptyMsg();
+};
+
+class TasControllerColorVisitor : public EmptyVisitor
+{
+private:
+    uint8_t red;
+    uint8_t green;
+    uint8_t blue;
+
+public:
+    TasControllerColorVisitor() : red(0), green(0), blue(0) {}
+    void visitCOLRgb(TasScript::COLRgb *color)
+    {
+        red = color->integer_1;
+        green = color->integer_2;
+        blue = color->integer_3;
+    }
+    uint8_t getRed()
+    {
+        return red;
+    }
+    uint8_t getGreen()
+    {
+        return green;
+    }
+    uint8_t getBlue()
+    {
+        return blue;
+    }
+};
+
+
+class TasControllerTypeVisitor : public EmptyVisitor
+{
+private:
+    TasController* controller;
+
+public:
+    TasControllerTypeVisitor() : controller(NULL) {}
+    void visitCTProController(TasScript::CTProController *p)
+    {
+        TasControllerColorVisitor* visitBody = new TasControllerColorVisitor();
+        TasControllerColorVisitor* visitButtons = new TasControllerColorVisitor();
+        TasControllerColorVisitor* visitLeftGrip = new TasControllerColorVisitor();
+        TasControllerColorVisitor* visitRightGrip = new TasControllerColorVisitor();
+        p->color_1->accept(visitBody);
+        p->color_2->accept(visitBody);
+        p->color_3->accept(visitLeftGrip);
+        p->color_4->accept(visitRightGrip);
+        controller = new TasController(HidDeviceType_FullKey3, visitBody->getRed(), visitBody->getGreen(), visitBody->getBlue(), visitButtons->getRed(), visitButtons->getGreen(), visitButtons->getBlue(), visitLeftGrip->getRed(), visitLeftGrip->getGreen(), visitLeftGrip->getBlue(), visitRightGrip->getRed(), visitRightGrip->getGreen(), visitRightGrip->getBlue());
+    }
+    TasController* get()
+    {
+        return controller;
+    }
 };

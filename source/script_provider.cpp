@@ -7,18 +7,18 @@
 #include "Absyn.H"
 #include "Parser.H"
 
-std::shared_ptr<TasScript::Command> ScriptProvider::nextLine()
+std::shared_ptr<TasScript::Command> ScriptProvider::nextCommand()
 {
     return pullFromQueue();
 }
-bool ScriptProvider::hasNextLine()
+bool ScriptProvider::hasNextCommand()
 {
     return !queueIsEmpty();
 }
 void ScriptProvider::populateQueue()
 {}
 
-bool LineStreamScriptProvider::hasNextLine()
+bool LineStreamScriptProvider::hasNextCommand()
 {
     return !(stream.eof() && queueIsEmpty());
 }
