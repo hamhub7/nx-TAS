@@ -26,12 +26,15 @@ void LineStreamScriptProvider::populateQueue()
 {
     if(shouldPopulate())
     {
-        std::string line = "";
         while(queueSize() < 30 && !stream.eof())
         {
+            std::string line;
             std::getline(stream, line);
-            TasScript::ListCommand* lineCmds = TasScript::pListCommand(line.c_str());
-            for_each(lineCmds->begin(), lineCmds->end(), [this](TasScript::Command* cmd) {
+            const char* lineCStr = line.c_str();
+            TasScript::Program* lineCmds = TasScript::pProgram(lineCStr);
+            TasScript::P* asLeaf = static_cast<TasScript::P*>(lineCmds);
+            TasScript::ListCommand* cList = asLeaf->listcommand_;
+            for_each(cList->begin(), cList->end(), [this](TasScript::Command* cmd) {
                 std::shared_ptr<TasScript::Command> cmdShared(cmd);
                 pushToQueue(cmdShared);
             });

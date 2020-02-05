@@ -1,7 +1,7 @@
 comment "#" ;
-L. Line ::= [Command] ;
+P. Program ::= [Command] ;
 
-separator Command ";" ;
+terminator Command ";" ;
 
 CAddController.    Command ::= "+ " Ident " " ControllerType ;
 CRemoveController. Command ::= "- " Ident ;

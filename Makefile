@@ -167,7 +167,6 @@ all: $(BUILD)
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
 	@bnfc -p TasScript -m --cpp nxTas.cf -o source
-	@cd source; perl -pi -e 's/(?<!TasScript)yy/TasScriptyy/g if $$. > 20 && $$. < 25' nxTas.y
 	@cd source; $(MAKE) --no-print-directory Lexer.C Parser.C
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 

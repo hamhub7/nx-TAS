@@ -31,12 +31,12 @@ class EmptyVisitor: public TasScript::Visitor
 public:
     EmptyVisitor() {}
     ~EmptyVisitor() {}
-    void visitLine(TasScript::Line *p) {}
+    void visitProgram(TasScript::Program *p) {}
     void visitCommand(TasScript::Command *p) {}
     void visitControllerType(TasScript::ControllerType *p) {}
     void visitColor(TasScript::Color *p) {}
     void visitButton(TasScript::Button *p) {}
-    void visitL(TasScript::L *p) {}
+    void visitP(TasScript::P *p) {}
     void visitCAddController(TasScript::CAddController *p) {}
     void visitCRemoveController(TasScript::CRemoveController *p) {}
     void visitCSetButton(TasScript::CSetButton *p) {}
