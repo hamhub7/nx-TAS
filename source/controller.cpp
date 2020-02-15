@@ -44,16 +44,8 @@ TasController::~TasController()
     if (R_FAILED(rc))
         fatalThrow(rc);
 }
-
-void TasController::waitForVsync()
-{
-    Result rc = eventWait(&vsync_event, U64_MAX);
-    if(R_FAILED(rc))
-        fatalThrow(rc);
-}
 void TasController::setInputNextFrame()
 {
-    waitForVsync();
     Result rc = hiddbgSetHdlsState(HdlsHandle, &state);
     if(R_FAILED(rc))
         fatalThrow(rc);
@@ -66,6 +58,14 @@ void TasController::runMsg(std::shared_ptr<struct controlMsg> msg)
     state.joysticks[JOYSTICK_LEFT].dy = msg->joy_l_y;
     state.joysticks[JOYSTICK_RIGHT].dx = msg->joy_r_x;
     state.joysticks[JOYSTICK_RIGHT].dy = msg->joy_r_y;
+}
+void TasController::setKeys(u64 keys)
+{
+    state.buttons |= keys;
+}
+void TasController::unsetKeys(u64 keys)
+{
+    state.buttons &= ~keys;
 }
 void TasController::emptyMsg()
 {

@@ -1,11 +1,11 @@
 #pragma once
 #include <switch.h>
+#include <algorithm>
 #include <cstring>
 #include <string>
 #include "script_provider.hpp"
 #include "script_util.hpp"
-
-extern Event vsync_event;
+#include "Skeleton.H"
 
 class TasController
 {
@@ -24,7 +24,6 @@ class TasController
     void pressA();
     void pressLR();
 
-    void waitForVsync();
     void setInputNextFrame();
 
     template<class T, class... Args> void runScript(Args&&... args)
@@ -71,15 +70,15 @@ class TasController
         nextLine.reset();
 
         hidScanInput();
-
-        waitForVsync();
     }
 
     void runMsg(std::shared_ptr<struct controlMsg> msg);
+    void setKeys(u64 keys);
+    void unsetKeys(u64 keys);
     void emptyMsg();
 };
 
-class TasControllerColorVisitor : public EmptyVisitor
+class TasControllerColorVisitor : public TasScript::Skeleton
 {
 private:
     uint8_t red;
@@ -109,7 +108,7 @@ public:
 };
 
 
-class TasControllerTypeVisitor : public EmptyVisitor
+class TasControllerTypeVisitor : public TasScript::Skeleton
 {
 private:
     TasController* controller;
@@ -131,5 +130,40 @@ public:
     TasController* get()
     {
         return controller;
+    }
+};
+
+class TasControllerKeysVisitor : public TasScript::Skeleton
+{
+private:
+    u64 keys;
+
+public:
+    TasControllerKeysVisitor() : keys(0) {}
+    void visitListButton(TasScript::ListButton* p)
+    {
+        for_each(p->begin(), p->end(), [this](TasScript::Button* p) {
+            p->accept(this);
+        });
+    }
+    void visitBButtonA(TasScript::BButtonA* p)
+    {
+        keys |= HidControllerKeys::KEY_A;
+    }
+    void visitBButtonB(TasScript::BButtonB* p)
+    {
+        keys |= HidControllerKeys::KEY_B;
+    }
+    void visitBButtonX(TasScript::BButtonX* p)
+    {
+        keys |= HidControllerKeys::KEY_X;
+    }
+    void visitBButtonY(TasScript::BButtonY* p)
+    {
+        keys |= HidControllerKeys::KEY_Y;
+    }
+    u64 get()
+    {
+        return keys;
     }
 };
