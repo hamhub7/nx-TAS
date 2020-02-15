@@ -14,7 +14,9 @@ private:
     std::map<std::string, TasController*> controllers;
 
 public:
-    ScriptWorld(Event& mv) : vsync(mv) {}
+    ScriptWorld(Event& mv) : vsync(mv) {
+        framesToWait = 0;
+    }
     void visitCAddController(TasScript::CAddController* p) {
         TasControllerTypeVisitor* tctVis = new TasControllerTypeVisitor();
         p->controllertype_->accept(tctVis);
@@ -68,13 +70,13 @@ template<class T, class... Args> void runScript(Event& vsync, Args&&... args)
 
     while(provider->hasNextCommand()) {
         nextCommand->accept(world);
-        nextCommand.reset();
         pushProvider(provider);
         world->waitOutFrames();
+        nextCommand.reset();
         nextCommand = provider->nextCommand();
     }
     nextCommand->accept(world);
-    nextCommand.reset();
     world->waitOutFrames();
+    nextCommand.reset();
     delete world;
 }

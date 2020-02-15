@@ -26,9 +26,9 @@ void LineStreamScriptProvider::populateQueue()
 {
     if(shouldPopulate())
     {
+        std::string line;
         while(queueSize() < 30 && !stream.eof())
         {
-            std::string line;
             std::getline(stream, line);
             const char* lineCStr = line.c_str();
             TasScript::Program* lineCmds = TasScript::pProgram(lineCStr);
