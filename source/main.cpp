@@ -15,9 +15,6 @@
 #include "script_populator.hpp"
 #include "script_runner.hpp"
 
-// Create VSync event
-Event vsync_event;
-
 // Initialize frame counter variable
 int frameCount = 0;
 
@@ -27,7 +24,7 @@ extern "C"
     u32 __nx_applet_type = AppletType_None;
 
     // Adjust size as needed.
-    #define INNER_HEAP_SIZE 0x80000
+    #define INNER_HEAP_SIZE 0x100000
     size_t nx_inner_heap_size = INNER_HEAP_SIZE;
     char   nx_inner_heap[INNER_HEAP_SIZE];
 
@@ -101,20 +98,6 @@ void __attribute__((weak)) __appExit(void)
     smExit();
 }
 
-void frameIncrement(void* _)
-{
-    while(true)
-    {
-        // Wait for a new frame...
-        Result rc = eventWait(&vsync_event, U64_MAX);
-        if(R_FAILED(rc))
-            fatalThrow(rc);
-
-        // ... Then increment the counter
-        ++frameCount;
-    }
-}
-
 class file_exception : public std::exception
 {
     virtual const char* what() const throw()
@@ -165,7 +148,9 @@ int main(int argc, char* argv[])
     if(R_FAILED(rc))
         fatalThrow(rc);
 
-    rc = viGetDisplayVsyncEvent(&disp, &vsync_event);
+    Event vsync;
+
+    rc = viGetDisplayVsyncEvent(&disp, &vsync);
     if(R_FAILED(rc))
         fatalThrow(rc);
 
@@ -213,7 +198,7 @@ int main(int argc, char* argv[])
 
         for(std::map<HidKeyboardScancode, std::string>::iterator it = scriptKeys.begin(); it != scriptKeys.end(); ++it) {
             if(hidKeyboardDown(it->first)) {
-                runScript<LineFileScriptProvider>(it->second);
+                runScript<LineFileScriptProvider>(vsync, it->second);
             }
         }
 

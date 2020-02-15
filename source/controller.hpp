@@ -162,6 +162,22 @@ public:
     {
         keys |= HidControllerKeys::KEY_Y;
     }
+    void visitBStickLeft(TasScript::BStickLeft* p)
+    {
+        keys |= HidControllerKeys::KEY_LSTICK;
+    }
+    void visitBStickRight(TasScript::BStickRight* p)
+    {
+        keys |= HidControllerKeys::KEY_RSTICK;
+    }
+    void visitBBumperL(TasScript::BBumperL* p)
+    {
+        keys |= HidControllerKeys::KEY_L;
+    }
+    void visitBBumperR(TasScript::BBumperR* p)
+    {
+        keys |= HidControllerKeys::KEY_R;
+    }
     u64 get()
     {
         return keys;

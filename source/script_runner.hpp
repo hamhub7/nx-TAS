@@ -6,16 +6,15 @@
 #include "Absyn.H"
 #include "Skeleton.H"
 
-extern Event vsync_event;
-
 class ScriptWorld : public TasScript::Skeleton
 {
 private:
     int framesToWait;
+    Event& vsync;
     std::map<std::string, TasController*> controllers;
 
 public:
-    ScriptWorld() {}
+    ScriptWorld(Event& mv) : vsync(mv) {}
     void visitCAddController(TasScript::CAddController* p) {
         TasControllerTypeVisitor* tctVis = new TasControllerTypeVisitor();
         p->controllertype_->accept(tctVis);
@@ -48,27 +47,34 @@ public:
     }
     void waitOutFrames() {
         while(framesToWait > 0) {
-            Result rc = eventWait(&vsync_event, U64_MAX);
-            if (R_FAILED(rc))
+            Result rc = eventWait(&vsync, U64_MAX);
+            if(R_FAILED(rc))
                 fatalThrow(rc);
             framesToWait--;
         }
     }
 };
 
-template<class T, class... Args> void runScript(Args&&... args)
+template<class T, class... Args> void runScript(Event& vsync, Args&&... args)
 {
     auto provider = std::make_shared<T>(std::forward<Args>(args)...);
     if(!provider->isGood()) return;
 
-    ScriptWorld* world = new ScriptWorld();
+    ScriptWorld* world = new ScriptWorld(vsync);
 
     provider->populateQueue();
-    std::shared_ptr<TasScript::Command> nextCommand;
+    std::shared_ptr<TasScript::Command> nextCommand = provider->nextCommand();
+    provider->populateQueue();
 
     while(provider->hasNextCommand()) {
+        nextCommand->accept(world);
+        nextCommand.reset();
+        pushProvider(provider);
         world->waitOutFrames();
         nextCommand = provider->nextCommand();
-        nextCommand->accept(world);
     }
+    nextCommand->accept(world);
+    nextCommand.reset();
+    world->waitOutFrames();
+    delete world;
 }
