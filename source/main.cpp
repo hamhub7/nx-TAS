@@ -24,7 +24,7 @@ extern "C"
     u32 __nx_applet_type = AppletType_None;
 
     // Adjust size as needed.
-    #define INNER_HEAP_SIZE 0x80000
+    #define INNER_HEAP_SIZE 0x180000
     size_t nx_inner_heap_size = INNER_HEAP_SIZE;
     char   nx_inner_heap[INNER_HEAP_SIZE];
 
@@ -106,39 +106,6 @@ class file_exception : public std::exception
     }
 } f_ex;
 
-std::map<std::string, int> params;
-void initConfig(std::string filename)
-{
-    std::ifstream ifs;
-
-    try
-    {
-        ifs.open(filename, std::ifstream::in);
-        if(!ifs.is_open()) { throw f_ex; }
-
-        std::string key;
-        uint8_t value;
-        while(ifs >> key >> value)
-        {
-            params[key] = value;
-        }
-    }
-    catch(const std::exception& e)
-    {
-        // Create the file since it doesn't exist or won't open or in the wrong format
-        std::ofstream ofs;
-        ofs.open(filename, std::ofstream::out | std::ofstream::trunc);
-        ofs << "BodyR 255" << std::endl;
-        ofs << "BodyG 255" << std::endl;
-        ofs << "BodyB 255" << std::endl;
-        ofs << "ButtonR 0" << std::endl;
-        ofs << "ButtonG 0" << std::endl;
-        ofs << "ButtonB 0" << std::endl;
-        ofs.close();
-    }
-    
-}
-
 // Main program entrypoint
 int main(int argc, char* argv[])
 {
@@ -155,8 +122,6 @@ int main(int argc, char* argv[])
         fatalThrow(rc);
 
     // Initialization code can go here.
-    initConfig("sdmc:/scripts/config.txt");
-
     std::map<HidKeyboardScancode, std::string> scriptKeys;
     scriptKeys[KBD_F1] = "sdmc:/scripts/script1.txt";
     scriptKeys[KBD_F2] = "sdmc:/scripts/script2.txt";

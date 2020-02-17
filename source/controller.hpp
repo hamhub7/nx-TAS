@@ -65,7 +65,7 @@ public:
 class TasControllerTypeVisitor : public TasScript::Skeleton
 {
 private:
-    TasController* controller;
+    std::shared_ptr<TasController> controller;
 
 public:
     TasControllerTypeVisitor() : controller(NULL) {}
@@ -76,12 +76,22 @@ public:
         TasControllerColorVisitor* visitLeftGrip = new TasControllerColorVisitor();
         TasControllerColorVisitor* visitRightGrip = new TasControllerColorVisitor();
         p->color_1->accept(visitBody);
-        p->color_2->accept(visitBody);
+        p->color_2->accept(visitButtons);
         p->color_3->accept(visitLeftGrip);
         p->color_4->accept(visitRightGrip);
-        controller = new TasController(HidDeviceType_FullKey3, visitBody->getRed(), visitBody->getGreen(), visitBody->getBlue(), visitButtons->getRed(), visitButtons->getGreen(), visitButtons->getBlue(), visitLeftGrip->getRed(), visitLeftGrip->getGreen(), visitLeftGrip->getBlue(), visitRightGrip->getRed(), visitRightGrip->getGreen(), visitRightGrip->getBlue());
+        controller = std::make_shared<TasController>(
+                HidDeviceType_FullKey3,
+                visitBody->getRed(), visitBody->getGreen(), visitBody->getBlue(),
+                visitButtons->getRed(), visitButtons->getGreen(), visitButtons->getBlue(),
+                visitLeftGrip->getRed(), visitLeftGrip->getGreen(), visitLeftGrip->getBlue(),
+                visitRightGrip->getRed(), visitRightGrip->getGreen(), visitRightGrip->getBlue()
+        );
+        delete visitBody;
+        delete visitButtons;
+        delete visitLeftGrip;
+        delete visitRightGrip;
     }
-    TasController* get()
+    std::shared_ptr<TasController> get()
     {
         return controller;
     }

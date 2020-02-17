@@ -13,15 +13,15 @@ class ScriptWorld : public TasScript::Skeleton
 private:
     int framesToWait;
     Event& vsync;
-    std::map<std::string, TasController*> controllers;
+    std::map<std::string, std::shared_ptr<TasController>> controllers;
 
 public:
     ScriptWorld(Event& mv) : vsync(mv) {
         framesToWait = 0;
     }
     ~ScriptWorld() {
-        for_each(controllers.begin(), controllers.end(), [](std::pair<std::string, TasController*> pair) {
-            delete pair.second;
+        for_each(controllers.begin(), controllers.end(), [](std::pair<std::string, std::shared_ptr<TasController>> pair) {
+            pair.second.reset();
         });
     }
     void visitCAddController(TasScript::CAddController* p) {
@@ -31,13 +31,13 @@ public:
         delete tctVis;
     }
     void visitCRemoveController(TasScript::CRemoveController* p) {
-        delete controllers[p->ident_];
+        controllers[p->ident_].reset();
         controllers.erase(p->ident_);
     }
     void visitCSetButton(TasScript::CSetButton* p) {
-        std::map<std::string, TasController*>::iterator ctl = controllers.find(p->ident_);
+        std::map<std::string, std::shared_ptr<TasController>>::iterator ctl = controllers.find(p->ident_);
         if(ctl != controllers.end()) {
-            TasController* ctlp = ctl->second;
+            std::shared_ptr<TasController> ctlp = ctl->second;
             TasControllerKeysVisitor* tckVis = new TasControllerKeysVisitor();
             p->listbutton_->accept(tckVis);
             ctlp->setKeys(tckVis->get());
@@ -45,9 +45,9 @@ public:
         }
     }
     void visitCUnsetButton(TasScript::CUnsetButton* p) {
-        std::map<std::string, TasController*>::iterator ctl = controllers.find(p->ident_);
+        std::map<std::string, std::shared_ptr<TasController>>::iterator ctl = controllers.find(p->ident_);
         if(ctl != controllers.end()) {
-            TasController* ctlp = ctl->second;
+            std::shared_ptr<TasController> ctlp = ctl->second;
             TasControllerKeysVisitor* tckVis = new TasControllerKeysVisitor();
             p->listbutton_->accept(tckVis);
             ctlp->unsetKeys(tckVis->get());
@@ -59,7 +59,7 @@ public:
     }
     void waitOutFrames() {
         if(framesToWait > 0) {
-            for_each(controllers.begin(), controllers.end(), [](std::pair<std::string, TasController*> pair) {
+            for_each(controllers.begin(), controllers.end(), [](std::pair<std::string, std::shared_ptr<TasController>> pair) {
                 pair.second->setInput();
             });
             while(framesToWait > 0) {
@@ -102,6 +102,7 @@ template<class T, class... Args> void runScript(Event& vsync, Args&&... args)
     world->waitOutFrames();
     nextCommand.reset();
     delete world;
+    provider.reset();
 
     delete shower;
 
