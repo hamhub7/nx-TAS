@@ -28,6 +28,7 @@ public:
         TasControllerTypeVisitor* tctVis = new TasControllerTypeVisitor();
         p->controllertype_->accept(tctVis);
         controllers[p->ident_] = tctVis->get();
+        delete tctVis;
     }
     void visitCRemoveController(TasScript::CRemoveController* p) {
         delete controllers[p->ident_];
@@ -40,6 +41,7 @@ public:
             TasControllerKeysVisitor* tckVis = new TasControllerKeysVisitor();
             p->listbutton_->accept(tckVis);
             ctlp->setKeys(tckVis->get());
+            delete tckVis;
         }
     }
     void visitCUnsetButton(TasScript::CUnsetButton* p) {
@@ -49,6 +51,7 @@ public:
             TasControllerKeysVisitor* tckVis = new TasControllerKeysVisitor();
             p->listbutton_->accept(tckVis);
             ctlp->unsetKeys(tckVis->get());
+            delete tckVis;
         }
     }
     void visitCWait(TasScript::CWait* p) {
