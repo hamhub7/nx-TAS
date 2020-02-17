@@ -24,53 +24,7 @@ class TasController
     void pressA();
     void pressLR();
 
-    void setInputNextFrame();
-
-    template<class T, class... Args> void runScript(Args&&... args)
-    {
-        auto provider = std::make_shared<T>(std::forward<Args>(args)...);
-        if(!provider->isGood()) return;
-
-        provider->populateQueue();
-        std::shared_ptr<struct controlMsg> nextLine = provider->nextLine();
-        provider->populateQueue();
-
-        int currentFrame = 0;
-        bool pause = false;
-
-        while(provider->hasNextLine() || nextLine->frame >= currentFrame)
-        {
-            if(hidKeyboardDown(KBD_PAUSE)) pause = !pause;
-            if(hidKeyboardDown(KBD_SCROLLLOCK)) break;
-            if(pause) continue;
-            if(nextLine->frame == currentFrame)
-            {
-                runMsg(nextLine);
-                if(provider->hasNextLine())
-                {
-                    nextLine.reset();
-                    nextLine = provider->nextLine();
-                }
-            }
-            else
-            {
-                emptyMsg();
-            }
-
-            pushProvider(provider);
-
-            setInputNextFrame();
-
-            currentFrame++;
-
-        }
-        emptyMsg();
-        setInputNextFrame();
-
-        nextLine.reset();
-
-        hidScanInput();
-    }
+    void setInput();
 
     void runMsg(std::shared_ptr<struct controlMsg> msg);
     void setKeys(u64 keys);
@@ -177,6 +131,30 @@ public:
     void visitBBumperR(TasScript::BBumperR* p)
     {
         keys |= HidControllerKeys::KEY_R;
+    }
+    void visitBTriggerZL(TasScript::BTriggerZL* p) {
+        keys |= HidControllerKeys::KEY_ZL;
+    }
+    void visitBTriggerZR(TasScript::BTriggerZR* p) {
+        keys |= HidControllerKeys::KEY_ZR;
+    }
+    void visitBPlus(TasScript::BPlus* p) {
+        keys |= HidControllerKeys::KEY_PLUS;
+    }
+    void visitBMinus(TasScript::BMinus* p) {
+        keys |= HidControllerKeys::KEY_MINUS;
+    }
+    void visitBDpadLeft(TasScript::BDpadLeft* p) {
+        keys |= HidControllerKeys::KEY_DLEFT;
+    }
+    void visitBDpadUp(TasScript::BDpadUp* p) {
+        keys |= HidControllerKeys::KEY_DUP;
+    }
+    void visitBDpadRight(TasScript::BDpadRight* p) {
+        keys |= HidControllerKeys::KEY_DRIGHT;
+    }
+    void visitBDpadDown(TasScript::BDpadDown* p) {
+        keys |= HidControllerKeys::KEY_DDOWN;
     }
     u64 get()
     {

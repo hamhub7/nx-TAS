@@ -6,6 +6,7 @@
 #include "script_provider.hpp"
 #include "Absyn.H"
 #include "Parser.H"
+#include "Printer.H"
 
 std::shared_ptr<TasScript::Command> ScriptProvider::nextCommand()
 {
@@ -26,6 +27,7 @@ void LineStreamScriptProvider::populateQueue()
 {
     if(shouldPopulate())
     {
+        TasScript::ShowAbsyn* shower = new TasScript::ShowAbsyn();
         std::string line;
         while(queueSize() < 30 && !stream.eof())
         {
@@ -34,7 +36,8 @@ void LineStreamScriptProvider::populateQueue()
             TasScript::Program* lineCmds = TasScript::pProgram(lineCStr);
             TasScript::P* asLeaf = static_cast<TasScript::P*>(lineCmds);
             TasScript::ListCommand* cList = asLeaf->listcommand_;
-            for_each(cList->begin(), cList->end(), [this](TasScript::Command* cmd) {
+            for_each(cList->begin(), cList->end(), [this, shower](TasScript::Command* cmd) {
+                // log_to_sd_out("Parsed command %s\n", shower->show(cmd));
                 std::shared_ptr<TasScript::Command> cmdShared(cmd);
                 pushToQueue(cmdShared);
             });

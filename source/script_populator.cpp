@@ -5,7 +5,7 @@
 
 #include "script_populator.hpp"
 
-/* mutable */ std::mutex mutex;
+std::mutex mutex;
 std::queue<std::shared_ptr<ScriptProvider>> queue;
 
 void populateLoop(void* _)

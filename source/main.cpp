@@ -24,7 +24,7 @@ extern "C"
     u32 __nx_applet_type = AppletType_None;
 
     // Adjust size as needed.
-    #define INNER_HEAP_SIZE 0x100000
+    #define INNER_HEAP_SIZE 0x200000
     size_t nx_inner_heap_size = INNER_HEAP_SIZE;
     char   nx_inner_heap[INNER_HEAP_SIZE];
 
@@ -199,6 +199,7 @@ int main(int argc, char* argv[])
         for(std::map<HidKeyboardScancode, std::string>::iterator it = scriptKeys.begin(); it != scriptKeys.end(); ++it) {
             if(hidKeyboardDown(it->first)) {
                 runScript<LineFileScriptProvider>(vsync, it->second);
+                break;
             }
         }
 

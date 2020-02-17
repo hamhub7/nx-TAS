@@ -25,3 +25,5 @@ struct controlMsg
 std::vector<struct controlMsg> getScriptLines(std::string fileName);
 
 struct controlMsg lineAsControlMsg(int frame, std::string keyStr, std::string lStickStr, std::string rStickStr);
+
+void log_to_sd_out(const char *fmt, ...);

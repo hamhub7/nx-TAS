@@ -44,7 +44,7 @@ TasController::~TasController()
     if (R_FAILED(rc))
         fatalThrow(rc);
 }
-void TasController::setInputNextFrame()
+void TasController::setInput()
 {
     Result rc = hiddbgSetHdlsState(HdlsHandle, &state);
     if(R_FAILED(rc))

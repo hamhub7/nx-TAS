@@ -3,7 +3,9 @@
 #include <memory>
 #include <map>
 #include "controller.hpp"
+#include "script_populator.hpp"
 #include "Absyn.H"
+#include "Printer.H"
 #include "Skeleton.H"
 
 class ScriptWorld : public TasScript::Skeleton
@@ -16,6 +18,11 @@ private:
 public:
     ScriptWorld(Event& mv) : vsync(mv) {
         framesToWait = 0;
+    }
+    ~ScriptWorld() {
+        for_each(controllers.begin(), controllers.end(), [](std::pair<std::string, TasController*> pair) {
+            delete pair.second;
+        });
     }
     void visitCAddController(TasScript::CAddController* p) {
         TasControllerTypeVisitor* tctVis = new TasControllerTypeVisitor();
@@ -48,11 +55,16 @@ public:
         framesToWait = p->integer_;
     }
     void waitOutFrames() {
-        while(framesToWait > 0) {
-            Result rc = eventWait(&vsync, U64_MAX);
-            if(R_FAILED(rc))
-                fatalThrow(rc);
-            framesToWait--;
+        if(framesToWait > 0) {
+            for_each(controllers.begin(), controllers.end(), [](std::pair<std::string, TasController*> pair) {
+                pair.second->setInput();
+            });
+            while(framesToWait > 0) {
+                Result rc = eventWait(&vsync, U64_MAX);
+                if(R_FAILED(rc))
+                    fatalThrow(rc);
+                framesToWait--;
+            }
         }
     }
 };
@@ -64,11 +76,19 @@ template<class T, class... Args> void runScript(Event& vsync, Args&&... args)
 
     ScriptWorld* world = new ScriptWorld(vsync);
 
+    TasScript::ShowAbsyn* shower = new TasScript::ShowAbsyn();
+
     provider->populateQueue();
     std::shared_ptr<TasScript::Command> nextCommand = provider->nextCommand();
     provider->populateQueue();
 
     while(provider->hasNextCommand()) {
+        log_to_sd_out("Queue size: %d\n", provider->queueSize());
+        if(nextCommand) {
+            log_to_sd_out("Running command %s\n", shower->show(nextCommand.get()));
+        } else {
+            log_to_sd_out("Uh oh! Couldn't get command. Should crash.\n");
+        }
         nextCommand->accept(world);
         pushProvider(provider);
         world->waitOutFrames();
@@ -79,4 +99,8 @@ template<class T, class... Args> void runScript(Event& vsync, Args&&... args)
     world->waitOutFrames();
     nextCommand.reset();
     delete world;
+
+    delete shower;
+
+    return;
 }
