@@ -3,6 +3,11 @@
 
 nx-TAS is fundamentally different than its predecessor, TAS-nx, in that it uses a virtual controller to send inputs instead of changing the inputs of the currently used controller.
 
+## Support the Creators
+Join our [Discord server](http://discord.gg/qeamCcV)
+Support me on [Patreon](https://www.patreon.com/aaronhh)
+Make a pull request!
+
 ## Features
 New features are already planned, such as changing the tye of controller (pro, joycons, sideways joycons, and possibly other controllers), multiple player TAS support, motion controls, some way to combat variable load times and rng (for most games), and color customizaition of the controllers.
 
