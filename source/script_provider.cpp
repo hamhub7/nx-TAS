@@ -27,7 +27,7 @@ void LineStreamScriptProvider::populateQueue()
 {
     if(shouldPopulate())
     {
-        TasScript::ShowAbsyn* shower = new TasScript::ShowAbsyn();
+        TasScript::ShowAbsyn shower;
         std::string line;
         while(queueSize() < 30 && !stream.eof())
         {
