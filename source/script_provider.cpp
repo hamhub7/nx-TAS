@@ -34,8 +34,9 @@ void LineStreamScriptProvider::populateQueue()
             std::getline(stream, line);
             const char* lineCStr = line.c_str();
             TasScript::Program* lineCmds = TasScript::pProgram(lineCStr);
-            TasScript::P* asLeaf = static_cast<TasScript::P*>(lineCmds);
-            TasScript::ListCommand* cList = asLeaf->listcommand_;
+            std::shared_ptr<TasScript::Program> pProgram(lineCmds);
+            std::shared_ptr<TasScript::P> pP = std::static_pointer_cast<TasScript::P>(pProgram);
+            std::shared_ptr<TasScript::ListCommand> cList(pP->listcommand_);
             for_each(cList->begin(), cList->end(), [this, shower](TasScript::Command* cmd) {
                 // log_to_sd_out("Parsed command %s\n", shower->show(cmd));
                 std::shared_ptr<TasScript::Command> cmdShared(cmd);
