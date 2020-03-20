@@ -7,6 +7,7 @@
 #include <istream>
 #include "script_util.hpp"
 #include "Absyn.H"
+#include "Skeleton.H"
 
 class ScriptProvider
 {
@@ -95,4 +96,22 @@ public:
     : LineStreamScriptProvider(stream), stream(fileName)
     {}
 
+};
+
+class ProgramCmdsExtractor: public TasScript::Skeleton
+{
+private:
+    TasScript::ListCommand* cmds;
+
+public:
+    ProgramCmdsExtractor(): cmds(NULL) {}
+
+    void visitP(TasScript::P* p)
+    {
+        cmds = p->listcommand_;
+    }
+    TasScript::ListCommand* getCmds()
+    {
+        return cmds;
+    }
 };
