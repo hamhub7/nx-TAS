@@ -4,6 +4,7 @@
 #include <memory>
 #include <thread>
 #include <mutex>
+#include <fstream>
 #include <istream>
 #include "script_util.hpp"
 #include "Absyn.H"

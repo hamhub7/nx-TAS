@@ -98,14 +98,6 @@ void __attribute__((weak)) __appExit(void)
     smExit();
 }
 
-class file_exception : public std::exception
-{
-    virtual const char* what() const throw()
-    {
-        return "File unopenable";
-    }
-} f_ex;
-
 // Main program entrypoint
 int main(int argc, char* argv[])
 {
@@ -140,18 +132,6 @@ int main(int argc, char* argv[])
     rc = hiddbgAttachHdlsWorkBuffer();
     if (R_FAILED(rc))
         fatalThrow(rc);
-
-    // Create new thread for counting frames
-    // Commented out as it was stealing vsync events from the script runner
-    /*
-    Thread countThread;
-    rc = threadCreate(&countThread, frameIncrement, NULL, 0x4000, 49, 3);
-    if(R_FAILED(rc))
-        fatalThrow(rc);
-    rc = threadStart(&countThread);
-    if(R_FAILED(rc))
-        fatalThrow(rc);
-    */
 
     // Start thread for populating script providers
     startPopulatorThread();

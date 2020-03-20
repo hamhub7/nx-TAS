@@ -26,10 +26,8 @@ class TasController
 
     void setInput();
 
-    void runMsg(std::shared_ptr<struct controlMsg> msg);
     void setKeys(u64 keys);
     void unsetKeys(u64 keys);
-    void emptyMsg();
 };
 
 class TasControllerColorVisitor : public TasScript::Skeleton

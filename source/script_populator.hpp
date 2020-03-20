@@ -2,6 +2,7 @@
 #include <memory>
 #include <thread>
 #include <mutex>
+#include <switch.h>
 #include "script_provider.hpp"
 
 void populateLoop(void* _);

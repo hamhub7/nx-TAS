@@ -51,14 +51,6 @@ void TasController::setInput()
         fatalThrow(rc);
 }
 
-void TasController::runMsg(std::shared_ptr<struct controlMsg> msg)
-{
-    state.buttons = msg->keys;
-    state.joysticks[JOYSTICK_LEFT].dx = msg->joy_l_x;
-    state.joysticks[JOYSTICK_LEFT].dy = msg->joy_l_y;
-    state.joysticks[JOYSTICK_RIGHT].dx = msg->joy_r_x;
-    state.joysticks[JOYSTICK_RIGHT].dy = msg->joy_r_y;
-}
 void TasController::setKeys(u64 keys)
 {
     state.buttons |= keys;
@@ -66,12 +58,4 @@ void TasController::setKeys(u64 keys)
 void TasController::unsetKeys(u64 keys)
 {
     state.buttons &= ~keys;
-}
-void TasController::emptyMsg()
-{
-    state.buttons = 0;
-    state.joysticks[JOYSTICK_LEFT].dx = 0;
-    state.joysticks[JOYSTICK_LEFT].dy = 0;
-    state.joysticks[JOYSTICK_RIGHT].dx = 0;
-    state.joysticks[JOYSTICK_RIGHT].dy = 0;
 }
