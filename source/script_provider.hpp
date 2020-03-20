@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 #include <string>
 #include <queue>
 #include <memory>
@@ -9,95 +10,7 @@
 #include "script_util.hpp"
 #include "Absyn.H"
 #include "Skeleton.H"
-
-class ScriptProvider
-{
-private:
-    mutable std::mutex mutex;
-    std::queue<std::shared_ptr<TasScript::Command>> internalQueue;
-
-protected:
-    void pushToQueue(std::shared_ptr<TasScript::Command> msg)
-    {
-        std::lock_guard<std::mutex> guard(mutex);
-        return internalQueue.push(msg);
-    }
-
-    std::shared_ptr<TasScript::Command> pullFromQueue()
-    {
-        std::lock_guard<std::mutex> guard(mutex);
-        std::shared_ptr<TasScript::Command> msg = internalQueue.front();
-        internalQueue.pop();
-        return msg;
-    }
-
-public:
-    bool queueIsEmpty()
-    {
-        std::lock_guard<std::mutex> guard(mutex);
-        return internalQueue.empty();
-    }
-    int queueSize()
-    {
-        std::lock_guard<std::mutex> guard(mutex);
-        return internalQueue.size();
-    }
-    virtual bool isGood() { return false; };
-
-    virtual std::shared_ptr<TasScript::Command> nextCommand();
-    virtual bool hasNextCommand();
-    virtual void populateQueue();
-
-};
-
-class LineStreamScriptProvider: public ScriptProvider
-{
-private:
-    std::istream& stream;
-
-protected:
-    virtual void afterEOF()
-    {}
-    virtual bool shouldPopulate()
-    {
-        return queueSize() < 15;
-    }
-
-public:
-    LineStreamScriptProvider(std::istream& mStream)
-    : stream(mStream)
-    {}
-
-    bool isGood()
-    {
-        return stream.good();
-    }
-
-    bool hasNextCommand();
-    void populateQueue();
-
-};
-
-class LineFileScriptProvider: public LineStreamScriptProvider
-{
-    std::ifstream stream;
-
-protected:
-    void afterEOF()
-    {
-        stream.close();
-    }
-    bool shouldPopulate()
-    {
-        return stream.is_open() && queueSize() < 15;
-    }
-
-public:
-    LineFileScriptProvider(std::string fileName)
-    : LineStreamScriptProvider(stream), stream(fileName)
-    {}
-
-};
+#include "Parser.H"
 
 class ProgramCmdsExtractor: public TasScript::Skeleton
 {
@@ -115,4 +28,127 @@ public:
     {
         return cmds;
     }
+};
+
+class ScriptProvider
+{
+private:
+    mutable std::mutex queueLockMutex;
+    std::queue<std::shared_ptr<TasScript::Command>> internalQueue;
+
+protected:
+    void pushToQueue(std::shared_ptr<TasScript::Command> msg)
+    {
+        std::lock_guard<std::mutex> guard(queueLockMutex);
+        return internalQueue.push(msg);
+    }
+
+    std::shared_ptr<TasScript::Command> pullFromQueue()
+    {
+        std::lock_guard<std::mutex> guard(queueLockMutex);
+        std::shared_ptr<TasScript::Command> msg = internalQueue.front();
+        internalQueue.pop();
+        return msg;
+    }
+    virtual bool shouldPopulate()
+    {
+        return queueSize() < 15;
+    }
+
+public:
+    bool queueIsEmpty()
+    {
+        std::lock_guard<std::mutex> guard(queueLockMutex);
+        return internalQueue.empty();
+    }
+    int queueSize()
+    {
+        std::lock_guard<std::mutex> guard(queueLockMutex);
+        return internalQueue.size();
+    }
+    virtual bool isConcrete() { return false; };
+    virtual bool isPopulatable() { return false; };
+    virtual int recommendedQueueSize() { return 0; };
+
+    std::shared_ptr<TasScript::Command> nextCommand()
+    {
+        return pullFromQueue();
+    }
+    bool isNextCommand()
+    {
+        return !(queueIsEmpty() && isPopulatable());
+    }
+    virtual void populateQueue() {}
+
+    virtual ~ScriptProvider() {}
+
+};
+
+class LineStreamScriptProvider: public ScriptProvider
+{
+private:
+    std::istream& stream;
+
+protected:
+    virtual void afterEOF()
+    {}
+
+public:
+    LineStreamScriptProvider(std::istream& mStream)
+    : stream(mStream)
+    {}
+
+    bool isConcrete()
+    {
+        return stream.good();
+    }
+    bool isPopulatable()
+    {
+        return !stream.eof();
+    }
+
+    void populateQueue()
+    {
+        std::string line;
+        ProgramCmdsExtractor extractor;
+        while(queueSize() < (2 * recommendedQueueSize()) && !stream.eof())
+        {
+            std::getline(stream, line);
+            const char* lineCStr = line.c_str();
+            TasScript::Program* pProgram = TasScript::pProgram(lineCStr);
+            pProgram->accept(&extractor);
+            std::for_each(extractor.getCmds()->begin(), extractor.getCmds()->end(), [this](TasScript::Command* cmd) {
+                std::shared_ptr<TasScript::Command> cmdShared(cmd);
+                pushToQueue(cmdShared);
+            });
+            delete pProgram;
+        }
+        if(stream.eof())
+        {
+            afterEOF();
+        }
+    }
+
+};
+
+class LineFileScriptProvider: public LineStreamScriptProvider
+{
+    std::ifstream stream;
+
+protected:
+    void afterEOF()
+    {
+        stream.close();
+    }
+
+public:
+    LineFileScriptProvider(std::string fileName)
+    : LineStreamScriptProvider(stream), stream(fileName)
+    {}
+
+    int recommendedQueueSize()
+    {
+        return 15;
+    }
+
 };

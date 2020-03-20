@@ -15,11 +15,10 @@ void populateLoop(void* _)
         if(!queueEmpty())
         {
             auto provider = pullProvider();
-            if(provider->queueIsEmpty())
+            if(provider->isPopulatable())
             {
                 provider->populateQueue();
             }
-            provider->populateQueue();
         }
         svcSleepThread(6250000);
     }

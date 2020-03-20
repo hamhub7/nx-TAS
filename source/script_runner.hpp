@@ -54,17 +54,18 @@ public:
     void visitCWait(TasScript::CWait* p) {
         framesToWait = p->integer_;
     }
+    bool hasWait() {
+        return framesToWait > 0;
+    }
     void waitOutFrames() {
-        if(framesToWait > 0) {
-            for_each(controllers.begin(), controllers.end(), [](std::pair<std::string, std::shared_ptr<TasController>> pair) {
-                pair.second->setInput();
-            });
-            while(framesToWait > 0) {
-                Result rc = eventWait(&vsync, U64_MAX);
-                if(R_FAILED(rc))
-                    fatalThrow(rc);
-                framesToWait--;
-            }
+        for_each(controllers.begin(), controllers.end(), [](std::pair<std::string, std::shared_ptr<TasController>> pair) {
+            pair.second->setInput();
+        });
+        while(framesToWait > 0) {
+            Result rc = eventWait(&vsync, U64_MAX);
+            if(R_FAILED(rc))
+                fatalThrow(rc);
+            framesToWait--;
         }
     }
 };
@@ -72,7 +73,7 @@ public:
 template<class T, class... Args> void runScript(Event& vsync, Args&&... args)
 {
     auto provider = std::make_shared<T>(std::forward<Args>(args)...);
-    if(!provider->isGood()) return;
+    if(!provider->isConcrete()) return;
 
     ScriptWorld world(vsync);
 
@@ -82,16 +83,14 @@ template<class T, class... Args> void runScript(Event& vsync, Args&&... args)
     std::shared_ptr<TasScript::Command> nextCommand = provider->nextCommand();
     provider->populateQueue();
 
-    while(provider->hasNextCommand()) {
-        log_to_sd_out("Queue size: %d\n", provider->queueSize());
-        if(nextCommand) {
-            log_to_sd_out("Running command %s\n", shower.show(nextCommand.get()));
-        } else {
-            log_to_sd_out("Uh oh! Couldn't get command. Should crash.\n");
-        }
+    while(provider->isNextCommand()) {
         nextCommand->accept(&world);
-        pushProvider(provider);
-        world.waitOutFrames();
+        if(provider->queueSize() < provider->recommendedQueueSize()) pushProvider(provider);
+        if(world.hasWait())
+        {
+            pushProvider(provider);
+            world.waitOutFrames();
+        }
         nextCommand.reset();
         nextCommand = provider->nextCommand();
     }
