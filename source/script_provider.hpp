@@ -80,7 +80,7 @@ public:
     }
     virtual void populateQueue() {}
 
-    virtual ~ScriptProvider() {}
+    virtual ~ScriptProvider() = default;
 
 };
 
