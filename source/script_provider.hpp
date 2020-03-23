@@ -76,7 +76,7 @@ public:
     }
     bool isNextCommand()
     {
-        return !(queueIsEmpty() && isPopulatable());
+        return !queueIsEmpty() || isPopulatable();
     }
     virtual void populateQueue() {}
 
