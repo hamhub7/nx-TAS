@@ -5,7 +5,7 @@ nx-TAS is fundamentally different than its predecessor, TAS-nx, in that it uses 
 
 ## Support the Creators
 Join our [Discord server](http://discord.gg/qeamCcV)  
-Support me on [Patreon](https://www.patreon.com/aaronhh)  
+Support me on [Patreon](https://www.patreon.com/aaronhh) or [PayPal](https://www.paypal.me/aaronhamhub)  
 Make a pull request!  
 
 ## Features
