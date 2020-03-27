@@ -1,49 +1,86 @@
 #pragma once
+#include <algorithm>
 #include <string>
 #include <queue>
 #include <memory>
 #include <thread>
 #include <mutex>
+#include <fstream>
 #include <istream>
-#include "script_init.hpp"
+#include "script_util.hpp"
+#include "Absyn.H"
+#include "Skeleton.H"
+#include "Parser.H"
+
+class ProgramCmdsExtractor: public TasScript::Skeleton
+{
+private:
+    TasScript::ListCommand* cmds;
+
+public:
+    ProgramCmdsExtractor(): cmds(NULL) {}
+
+    void visitP(TasScript::P* p)
+    {
+        cmds = p->listcommand_;
+    }
+    TasScript::ListCommand* getCmds()
+    {
+        return cmds;
+    }
+};
 
 class ScriptProvider
 {
 private:
-    mutable std::mutex mutex;
-    std::queue<std::shared_ptr<struct controlMsg>> internalQueue;
+    mutable std::mutex queueLockMutex;
+    std::queue<std::shared_ptr<TasScript::Command>> internalQueue;
 
 protected:
-    void pushToQueue(std::shared_ptr<struct controlMsg> msg)
+    void pushToQueue(std::shared_ptr<TasScript::Command> msg)
     {
-        std::lock_guard<std::mutex> guard(mutex);
+        std::lock_guard<std::mutex> guard(queueLockMutex);
         return internalQueue.push(msg);
     }
 
-    std::shared_ptr<struct controlMsg> pullFromQueue()
+    std::shared_ptr<TasScript::Command> pullFromQueue()
     {
-        std::lock_guard<std::mutex> guard(mutex);
-        std::shared_ptr<struct controlMsg> msg = internalQueue.front();
+        std::lock_guard<std::mutex> guard(queueLockMutex);
+        std::shared_ptr<TasScript::Command> msg = internalQueue.front();
         internalQueue.pop();
         return msg;
+    }
+    virtual bool shouldPopulate()
+    {
+        return queueSize() < 15;
     }
 
 public:
     bool queueIsEmpty()
     {
-        std::lock_guard<std::mutex> guard(mutex);
+        std::lock_guard<std::mutex> guard(queueLockMutex);
         return internalQueue.empty();
     }
     int queueSize()
     {
-        std::lock_guard<std::mutex> guard(mutex);
+        std::lock_guard<std::mutex> guard(queueLockMutex);
         return internalQueue.size();
     }
-    virtual bool isGood() { return false; };
+    virtual bool isConcrete() { return false; };
+    virtual bool isPopulatable() { return false; };
+    virtual int recommendedQueueSize() { return 0; };
 
-    virtual std::shared_ptr<struct controlMsg> nextLine();
-    virtual bool hasNextLine();
-    virtual void populateQueue();
+    std::shared_ptr<TasScript::Command> nextCommand()
+    {
+        return pullFromQueue();
+    }
+    bool isNextCommand()
+    {
+        return !queueIsEmpty() || isPopulatable();
+    }
+    virtual void populateQueue() {}
+
+    virtual ~ScriptProvider() = default;
 
 };
 
@@ -55,23 +92,42 @@ private:
 protected:
     virtual void afterEOF()
     {}
-    virtual bool shouldPopulate()
-    {
-        return queueSize() < 15;
-    }
 
 public:
     LineStreamScriptProvider(std::istream& mStream)
     : stream(mStream)
     {}
 
-    bool isGood()
+    bool isConcrete()
     {
         return stream.good();
     }
+    bool isPopulatable()
+    {
+        return !stream.eof();
+    }
 
-    bool hasNextLine();
-    void populateQueue();
+    void populateQueue()
+    {
+        std::string line;
+        ProgramCmdsExtractor extractor;
+        while(queueSize() < (2 * recommendedQueueSize()) && !stream.eof())
+        {
+            std::getline(stream, line);
+            const char* lineCStr = line.c_str();
+            TasScript::Program* pProgram = TasScript::pProgram(lineCStr);
+            pProgram->accept(&extractor);
+            std::for_each(extractor.getCmds()->begin(), extractor.getCmds()->end(), [this](TasScript::Command* cmd) {
+                std::shared_ptr<TasScript::Command> cmdShared(cmd);
+                pushToQueue(cmdShared);
+            });
+            delete pProgram;
+        }
+        if(stream.eof())
+        {
+            afterEOF();
+        }
+    }
 
 };
 
@@ -84,44 +140,15 @@ protected:
     {
         stream.close();
     }
-    bool shouldPopulate()
-    {
-        return stream.is_open() && queueSize() < 15;
-    }
 
 public:
     LineFileScriptProvider(std::string fileName)
     : LineStreamScriptProvider(stream), stream(fileName)
     {}
 
-};
-
-class PressAProvider: public ScriptProvider
-{
-public:
-    PressAProvider()
+    int recommendedQueueSize()
     {
-        pushToQueue(std::make_shared<struct controlMsg>(lineAsControlMsg(1, "KEY_A", "0;0", "0;0")));
-        pushToQueue(std::make_shared<struct controlMsg>(lineAsControlMsg(2, "KEY_A", "0;0", "0;0")));
+        return 15;
     }
 
-    bool isGood()
-    {
-        return true;
-    }
-};
-
-class PressLRProvider: public ScriptProvider
-{
-public:
-    PressLRProvider()
-    {
-        pushToQueue(std::make_shared<struct controlMsg>(lineAsControlMsg(1, "KEY_L;KEY_R", "0;0", "0;0")));
-        pushToQueue(std::make_shared<struct controlMsg>(lineAsControlMsg(2, "KEY_L;KEY_R", "0;0", "0;0")));
-    }
-
-    bool isGood()
-    {
-        return true;
-    }
 };

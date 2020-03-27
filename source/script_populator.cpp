@@ -5,7 +5,7 @@
 
 #include "script_populator.hpp"
 
-/* mutable */ std::mutex mutex;
+std::mutex mutex;
 std::queue<std::shared_ptr<ScriptProvider>> queue;
 
 void populateLoop(void* _)
@@ -15,11 +15,10 @@ void populateLoop(void* _)
         if(!queueEmpty())
         {
             auto provider = pullProvider();
-            if(provider->queueIsEmpty())
+            if(provider->isPopulatable())
             {
                 provider->populateQueue();
             }
-            provider->populateQueue();
         }
         svcSleepThread(6250000);
     }

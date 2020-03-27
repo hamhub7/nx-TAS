@@ -5,3 +5,13 @@ nx-TAS.nsp
 /build
 .DS_Store
 /release
+
+*~
+\#*\#
+*.bak
+
+nxTas.l
+nxTas.y
+*.C
+*.H
+source/Makefile

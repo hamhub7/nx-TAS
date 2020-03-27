@@ -13,9 +13,7 @@
 #include "controller.hpp"
 #include "script_provider.hpp"
 #include "script_populator.hpp"
-
-// Create VSync event
-Event vsync_event;
+#include "script_runner.hpp"
 
 // Initialize frame counter variable
 int frameCount = 0;
@@ -26,7 +24,7 @@ extern "C"
     u32 __nx_applet_type = AppletType_None;
 
     // Adjust size as needed.
-    #define INNER_HEAP_SIZE 0x80000
+    #define INNER_HEAP_SIZE 0x180000
     size_t nx_inner_heap_size = INNER_HEAP_SIZE;
     char   nx_inner_heap[INNER_HEAP_SIZE];
 
@@ -100,61 +98,6 @@ void __attribute__((weak)) __appExit(void)
     smExit();
 }
 
-void frameIncrement(void* _)
-{
-    while(true)
-    {
-        // Wait for a new frame...
-        Result rc = eventWait(&vsync_event, U64_MAX);
-        if(R_FAILED(rc))
-            fatalThrow(rc);
-
-        // ... Then increment the counter
-        ++frameCount;
-    }
-}
-
-class file_exception : public std::exception
-{
-    virtual const char* what() const throw()
-    {
-        return "File unopenable";
-    }
-} f_ex;
-
-std::map<std::string, int> params;
-void initConfig(std::string filename)
-{
-    std::ifstream ifs;
-
-    try
-    {
-        ifs.open(filename, std::ifstream::in);
-        if(!ifs.is_open()) { throw f_ex; }
-
-        std::string key;
-        uint8_t value;
-        while(ifs >> key >> value)
-        {
-            params[key] = value;
-        }
-    }
-    catch(const std::exception& e)
-    {
-        // Create the file since it doesn't exist or won't open or in the wrong format
-        std::ofstream ofs;
-        ofs.open(filename, std::ofstream::out | std::ofstream::trunc);
-        ofs << "BodyR 255" << std::endl;
-        ofs << "BodyG 255" << std::endl;
-        ofs << "BodyB 255" << std::endl;
-        ofs << "ButtonR 0" << std::endl;
-        ofs << "ButtonG 0" << std::endl;
-        ofs << "ButtonB 0" << std::endl;
-        ofs.close();
-    }
-    
-}
-
 // Main program entrypoint
 int main(int argc, char* argv[])
 {
@@ -164,30 +107,31 @@ int main(int argc, char* argv[])
     if(R_FAILED(rc))
         fatalThrow(rc);
 
-    rc = viGetDisplayVsyncEvent(&disp, &vsync_event);
+    Event vsync;
+
+    rc = viGetDisplayVsyncEvent(&disp, &vsync);
     if(R_FAILED(rc))
         fatalThrow(rc);
 
     // Initialization code can go here.
-    std::vector<TasController*> controllers;
-    initConfig("sdmc:/scripts/config.txt");
+    std::map<HidKeyboardScancode, std::string> scriptKeys;
+    scriptKeys[KBD_F1] = "sdmc:/scripts/script1.txt";
+    scriptKeys[KBD_F2] = "sdmc:/scripts/script2.txt";
+    scriptKeys[KBD_F3] = "sdmc:/scripts/script3.txt";
+    scriptKeys[KBD_F4] = "sdmc:/scripts/script4.txt";
+    scriptKeys[KBD_F5] = "sdmc:/scripts/script5.txt";
+    scriptKeys[KBD_F6] = "sdmc:/scripts/script6.txt";
+    scriptKeys[KBD_F7] = "sdmc:/scripts/script7.txt";
+    scriptKeys[KBD_F8] = "sdmc:/scripts/script8.txt";
+    scriptKeys[KBD_F9] = "sdmc:/scripts/script9.txt";
+    scriptKeys[KBD_F10] = "sdmc:/scripts/script10.txt";
+    scriptKeys[KBD_F11] = "sdmc:/scripts/script11.txt";
+    scriptKeys[KBD_F12] = "sdmc:/scripts/script12.txt";
 
     // Attach Work Buffer
     rc = hiddbgAttachHdlsWorkBuffer();
     if (R_FAILED(rc))
         fatalThrow(rc);
-
-    // Create new thread for counting frames
-    // Commented out as it was stealing vsync events from the script runner
-    /*
-    Thread countThread;
-    rc = threadCreate(&countThread, frameIncrement, NULL, 0x4000, 49, 3);
-    if(R_FAILED(rc))
-        fatalThrow(rc);
-    rc = threadStart(&countThread);
-    if(R_FAILED(rc))
-        fatalThrow(rc);
-    */
 
     // Start thread for populating script providers
     startPopulatorThread();
@@ -197,197 +141,10 @@ int main(int argc, char* argv[])
     {
         hidScanInput();
 
-        if(hidKeyboardDown(KBD_F1))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script1.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F2))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script2.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F3))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script3.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F4))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script4.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F5))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script5.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F6))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script6.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F7))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script7.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F8))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script8.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F9))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script9.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F10))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script10.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F11))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script11.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_F12))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->runScript<LineFileScriptProvider>("sdmc:/scripts/script12.txt");
-            }
-        }
-
-        if(hidKeyboardDown(KBD_Q))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->pressLR();
-            }
-        }
-
-        if(hidKeyboardDown(KBD_W))
-        {
-            if(controllers.size() > 0)
-            {
-                controllers.front()->pressA();
-            }
-        }
-
-        if(hidKeyboardDown(KBD_1))
-        {
-            if(controllers.size() < 8)
-            {
-                initConfig("sdmc:/scripts/config.txt");
-                controllers.push_back(new TasController(HidDeviceType_FullKey3, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
-            }
-        }
-
-        if(hidKeyboardDown(KBD_2))
-        {
-            if(controllers.size() < 7)
-            {
-                initConfig("sdmc:/scripts/config.txt");
-                controllers.push_back(new TasController(HidDeviceType_JoyLeft2, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
-                controllers.push_back(new TasController(HidDeviceType_JoyRight1, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
-            }
-        }
-
-        if(hidKeyboardDown(KBD_3))
-        {
-            if(controllers.size() < 8)
-            {
-                initConfig("sdmc:/scripts/config.txt");
-                controllers.push_back(new TasController(HidDeviceType_JoyLeft2, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
-            }
-        }
-
-        if(hidKeyboardDown(KBD_4))
-        {
-            if(controllers.size() < 8)
-            {
-                initConfig("sdmc:/scripts/config.txt");
-                controllers.push_back(new TasController(HidDeviceType_JoyRight1, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
-            }
-        }
-
-        if(hidKeyboardDown(KBD_5))
-        {
-            if(controllers.size() < 8)
-            {
-                initConfig("sdmc:/scripts/config.txt");
-                controllers.push_back(new TasController(HidDeviceType_LarkLeftHVC, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
-            }
-        }
-
-        if(hidKeyboardDown(KBD_6))
-        {
-            if(controllers.size() < 8)
-            {
-                initConfig("sdmc:/scripts/config.txt");
-                controllers.push_back(new TasController(HidDeviceType_LarkRightHVC, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
-            }
-        }
-
-        if(hidKeyboardDown(KBD_7))
-        {
-            if(controllers.size() < 8)
-            {
-                initConfig("sdmc:/scripts/config.txt");
-                controllers.push_back(new TasController(HidDeviceType_LarkLeftNES, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
-            }
-        }
-
-        if(hidKeyboardDown(KBD_8))
-        {
-            if(controllers.size() < 8)
-            {
-                initConfig("sdmc:/scripts/config.txt");
-                controllers.push_back(new TasController(HidDeviceType_System19, params["BodyR"], params["BodyG"], params["BodyB"], params["ButtonsR"], params["ButtonsG"], params["ButtonsB"]));
-            }
-        }
-
-        if(hidKeyboardDown(KBD_MINUS))
-        {
-            if(controllers.size() > 0)
-            {
-                delete controllers.back();
-                controllers.pop_back();
+        for(std::map<HidKeyboardScancode, std::string>::iterator it = scriptKeys.begin(); it != scriptKeys.end(); ++it) {
+            if(hidKeyboardDown(it->first)) {
+                runScript<LineFileScriptProvider>(vsync, it->second);
+                break;
             }
         }
 
