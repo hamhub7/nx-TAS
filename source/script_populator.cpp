@@ -21,7 +21,7 @@ void populateLoop(void* _)
             }
             provider->populateQueue();
         }
-        svcSleepThread(6250000);
+        svcSleepThread(16666666);
     }
 }
 

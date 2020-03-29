@@ -58,7 +58,7 @@ class TasController
                 emptyMsg();
             }
 
-            pushProvider(provider);
+            if(currentFrame % 8 == 0) pushProvider(provider);
 
             setInputNextFrame();
 
