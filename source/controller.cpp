@@ -75,7 +75,7 @@ void TasController::setInputNextFrame()
 
 void TasController::setMotion()
 {
-
+    
 }
 
 void TasController::runMsg(std::shared_ptr<struct controlMsg> msg)

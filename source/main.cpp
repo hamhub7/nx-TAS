@@ -169,6 +169,26 @@ int main(int argc, char* argv[])
         fatalThrow(rc);
 
     // Initialization code can go here.
+    // Skyline handle
+    Handle h;
+    skyline::utils::Ipc::getOwnProcessHandle(&h);
+    envSetOwnProcessHandle(h);
+    // hook init
+    A64HookInit();
+
+    void (nn::prepo::PlayReport::*saveImpl)(SixAxisSensorState*, SixAxisSensorHandle const&) = &nn::hid::GetSixAxisSensorState;
+    int (nn::prepo::PlayReport::*saveWUidImpl)(SixAxisSensorState*, int, SixAxisSensorHandle const&) = &nn::hid::GetSixAxisSensorStates;
+    A64HookFunction(
+        reinterpret_cast<void*>(saveImpl), 
+        reinterpret_cast<void*>(handleNnPrepoSave),
+        (void**) &GetSixAxisSensorState
+    );
+    A64HookFunction(
+        reinterpret_cast<void*>(saveWUidImpl), 
+        reinterpret_cast<void*>(handleNnPrepoSaveWUid), 
+        (void**) &GetSixAxisSensorStates
+    );
+
     std::vector<TasController*> controllers;
     initConfig("sdmc:/scripts/config.txt");
 
