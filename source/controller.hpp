@@ -26,6 +26,7 @@ class TasController
 
     void waitForVsync();
     void setInputNextFrame();
+    void setMotion();
 
     template<class T, class... Args> void runScript(Args&&... args)
     {
