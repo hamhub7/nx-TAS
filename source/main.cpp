@@ -105,7 +105,7 @@ void frameIncrement(void* _)
     while(true)
     {
         // Wait for a new frame...
-        Result rc = eventWait(&vsync_event, U64_MAX);
+        Result rc = eventWait(&vsync_event, UINT64_MAX);
         if(R_FAILED(rc))
             fatalThrow(rc);
 
