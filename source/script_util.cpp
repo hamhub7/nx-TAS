@@ -1,6 +1,7 @@
 #include "script_util.hpp"
 
 #include <cstdarg>
+#include <cstdio>
 
 void log_to_sd_out(const char *fmt, ...) 
 {
