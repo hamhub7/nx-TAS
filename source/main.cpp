@@ -143,7 +143,7 @@ int main(int argc, char* argv[])
 
         for(std::map<HidKeyboardScancode, std::string>::iterator it = scriptKeys.begin(); it != scriptKeys.end(); ++it) {
             if(hidKeyboardDown(it->first)) {
-                runScript<LineFileScriptProvider>(vsync, it->second);
+                runScript(vsync, it->second);
                 break;
             }
         }
