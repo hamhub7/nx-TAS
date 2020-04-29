@@ -54,19 +54,11 @@
             
             <li class="nav-item" data-level="1"><a href="#nx-tas" class="nav-link">nx-TAS</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-level="2"><a href="#grammar-definition" class="nav-link">Grammar Definition</a>
+            <li class="nav-item" data-level="2"><a href="#chaiscript" class="nav-link">ChaiScript</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#commands" class="nav-link">Commands</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#variables" class="nav-link">Variables</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-level="2"><a href="#functions" class="nav-link">Functions</a>
+            <li class="nav-item" data-level="2"><a href="#nx-tas-method-list" class="nav-link">nx-TAS Method List</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -79,97 +71,9 @@
 
 <h1 id="nx-tas">nx-TAS</h1>
 <p>Scripting documentation for <a href="https://github.com/hamhub7/nx-TAS">nx-TAS</a>.</p>
-<h2 id="grammar-definition">Grammar Definition</h2>
-<pre><code class="lbnf">comment &quot;#&quot; ;
-P. Program ::= [Command] ;
-
-terminator Command &quot;;&quot; ;
-
-CAddController.    Command ::= &quot;+ &quot; Ident &quot; &quot; ControllerType ;
-CRemoveController. Command ::= &quot;- &quot; Ident ;
-CSetButton.        Command ::= &quot;] &quot; Ident &quot; &quot; [Button] ;
-CUnsetButton.      Command ::= &quot;[ &quot; Ident &quot; &quot; [Button] ;
-CWait.             Command ::= &quot;! &quot; Integer ;
-CImport.           Command ::= &quot;$ &quot; String ;
-
-CTProController. ControllerType ::= &quot;pro_controller &quot; Color &quot; &quot; Color &quot; &quot; Color &quot; &quot; Color ;
-
-COLRgb. Color ::= &quot;rgb(&quot; Integer &quot;,&quot; Integer &quot;,&quot; Integer &quot;)&quot; ;
-
-separator Button &quot;,&quot; ;
-
-BButtonA.       Button ::= &quot;A&quot; ;
-BButtonB.       Button ::= &quot;B&quot; ;
-BButtonX.       Button ::= &quot;X&quot; ;
-BButtonY.       Button ::= &quot;Y&quot; ;
-BBumperL.       Button ::= &quot;L&quot; ;
-BBumperR.       Button ::= &quot;R&quot; ;
-BBumperSLLeft.  Button ::= &quot;SLL&quot; ;
-BBumperSRLeft.  Button ::= &quot;SRL&quot; ;
-BBumperSLRight. Button ::= &quot;SLR&quot; ;
-BBumperSRRight. Button ::= &quot;SRR&quot; ;
-BTriggerZL.     Button ::= &quot;ZL&quot; ;
-BTriggerZR.     Button ::= &quot;ZR&quot; ;
-BDpadUp.        Button ::= &quot;DU&quot; ;
-BDpadDown.      Button ::= &quot;DD&quot; ;
-BDpadLeft.      Button ::= &quot;DL&quot; ;
-BDpadRight.     Button ::= &quot;DR&quot; ;
-BStickLeft.     Button ::= &quot;LS&quot; ;
-BStickRight.    Button ::= &quot;RS&quot; ;
-BPlus.          Button ::= &quot;PLUS&quot; ;
-BMinus.         Button ::= &quot;MINUS&quot; ;
-</code></pre>
-
-<h3 id="extra-syntax-rules">Extra Syntax Rules</h3>
-<p>Due to the <code>comment</code> and <code>terminator</code> rules in the grammar, valid scripts will look like:</p>
-<pre><code>commandA ; commandB ;
-
-commandC ;
-# comment
-commandD ;
-commandE ; commandF ; commandG ;
-</code></pre>
-
-<h2 id="commands">Commands</h2>
-<h3 id="controller-management">Controller Management</h3>
-<pre><code class="lbnf">CAddController.    Command ::= &quot;+ &quot; Ident &quot; &quot; ControllerType ;
-CRemoveController. Command ::= &quot;- &quot; Ident ;
-</code></pre>
-
-<p>To add controllers, use the <code>+</code> command:</p>
-<pre><code>+ mario pro_controller rgb(255,0,0) rgb(255,255,255) rgb(255,0,0) rgb(255,0,0)
-</code></pre>
-
-<p>This creates a controller with a red body, white buttons, and red left and right grips respectively. It will be referred to as <code>mario</code> until it is removed.</p>
-<p>To remove controllers, use the <code>-</code> command:</p>
-<pre><code>- mario
-</code></pre>
-
-<h3 id="button-management">Button Management</h3>
-<pre><code class="lbnf">CSetButton.        Command ::= &quot;] &quot; Ident &quot; &quot; [Button] ;
-CUnsetButton.      Command ::= &quot;[ &quot; Ident &quot; &quot; [Button] ;
-</code></pre>
-
-<p>To set buttons, use the <code>]</code> command:</p>
-<pre><code>] mario A,B,X,Y
-</code></pre>
-
-<p>To unset buttons, use the <code>[</code> command:</p>
-<pre><code>[ mario A,B,X,Y
-</code></pre>
-
-<p>Most button names are simple, however the DPAD is listed as <code>DU</code> for DPAD-Up, <code>DD</code> for DPAD-Down, <code>DR</code> for DPAD-Right, and <code>DL</code> for DPAD-Left.</p>
-<h3 id="wait-frames">Wait Frames</h3>
-<pre><code class="lbnf">CWait.             Command ::= &quot;! &quot; Integer ;
-</code></pre>
-
-<p>To wait a certain amount of frames, use the <code>!</code> command:</p>
-<pre><code>! 5
-</code></pre>
-
-<h2 id="variables">Variables</h2>
-<p>TODO</p>
-<h2 id="functions">Functions</h2>
+<h2 id="chaiscript">ChaiScript</h2>
+<p>nx-TAS uses ChaiScript to read and run scripts. You can find a brief overview of how to write ChaiScript programs in <a href="https://github.com/ChaiScript/ChaiScript/blob/develop/cheatsheet.md#language-reference">their official cheatsheet</a>.</p>
+<h2 id="nx-tas-method-list">nx-TAS Method List</h2>
 <p>TODO</p></div>
             </div>
         </div>
@@ -254,5 +158,5 @@ CUnsetButton.      Command ::= &quot;[ &quot; Ident &quot; &quot; [Button] ;
 
 <!--
 MkDocs version : 1.1
-Build Date UTC : 2020-03-21 04:40:32
+Build Date UTC : 2020-04-29 23:49:21
 -->
