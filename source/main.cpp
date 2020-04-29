@@ -131,9 +131,6 @@ int main(int argc, char* argv[])
     if (R_FAILED(rc))
         fatalThrow(rc);
 
-    // Start thread for populating script providers
-    startPopulatorThread();
-
     // Your code / main loop goes here.
     while(true)
     {
