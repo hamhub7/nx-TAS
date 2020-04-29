@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/opt/devkitpro/libnx/include/**",
-                "/opt/devkitpro/libnx/include/switch/**"
+                "/opt/devkitpro/libnx/include/switch/**",
+                "${workspaceFolder}/include/**"
             ],
             "defines": [
                 "__SWITCH__"
@@ -20,7 +21,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "C:/msys64/opt/devkitpro/libnx/include/**",
-                "C:/msys64/opt/devkitpro/libnx/include/switch/**"
+                "C:/msys64/opt/devkitpro/libnx/include/switch/**",
+                "${workspaceFolder}/include/**"
             ],
             "defines": [
                 "__SWITCH__"
