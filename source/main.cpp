@@ -11,8 +11,6 @@
 
 // Include headers from other parts of the program
 #include "controller.hpp"
-#include "script_provider.hpp"
-#include "script_populator.hpp"
 #include "script_runner.hpp"
 
 // Initialize frame counter variable

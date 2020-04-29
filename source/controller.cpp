@@ -1,7 +1,5 @@
 #include "controller.hpp"
 #include "script_util.hpp"
-#include "script_provider.hpp"
-#include "script_populator.hpp"
 
 TasController::TasController(uint8_t deviceType, uint8_t bodyR, uint8_t bodyG, uint8_t bodyB, uint8_t buttonR, uint8_t buttonG, uint8_t buttonB, uint8_t leftgripR, uint8_t leftgripG, uint8_t leftgripB, uint8_t rightgripR, uint8_t rightgripG, uint8_t rightgripB)
 {
