@@ -1,2 +1,8 @@
 #include "script_runner.hpp"
-#include "script_provider.hpp"
+
+void runScript(Event& vsync, std::string fileName)
+{
+    chaiscript::ChaiScript chai;
+
+    return chai.eval_file<void>(fileName);
+}
