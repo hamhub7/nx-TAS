@@ -18,7 +18,7 @@ First of all, you need to have an [Atmosphere-injected Switch](https://switch.ho
 1. Acquire `nx-TAS.nsp` either from the latest release, or more preferrably build yourself via the instructions below
 2. Create the relevant title directory on your Switch's SD card at `sdmc:/atmosphere/titles/0100000000000cab/` (`sdmc:/atmosphere/contents/0100000000000cab` on Atmosphere versions 0.10.0 or newer)
 3. Place the NSP as `sdmc:/atmosphere/titles/0100000000000cab/exefs.nsp` (`sdmc:/atmosphere/contents/0100000000000cab/exefs.nsp` on Atmosphere versions 0.10.0 or newer)
-4. Create an empty file at `sdmc:/atmosphere/titles/0100000000000cab/flags/boot2.flag` (`sdmc:/atmosphere/contents/0100000000000cab//flags/boot2.flag` on Atmosphere versions 0.10.0 or newer)
+4. Create an empty file at `sdmc:/atmosphere/titles/0100000000000cab/flags/boot2.flag` (`sdmc:/atmosphere/contents/0100000000000cab/flags/boot2.flag` on Atmosphere versions 0.10.0 or newer)
 5. Reboot into CFW
 
 ### Keybinds
