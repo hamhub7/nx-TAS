@@ -4,7 +4,7 @@
 nx-TAS is fundamentally different than its predecessor, TAS-nx, in that it uses a virtual controller to send inputs instead of changing the inputs of the currently used controller.
 
 ## Support the Creators
-Join our [Discord server](http://discord.gg/qeamCcV)  
+Join our [Discord server](https://discord.gg/HSPrhX8)  
 Support me on [Patreon](https://www.patreon.com/aaronhh) or [PayPal](https://www.paypal.me/aaronhamhub)  
 Make a pull request!  
 
