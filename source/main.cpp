@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 // Include the most common headers from the C standard library
 #include <stdio.h>
 #include <stdlib.h>
