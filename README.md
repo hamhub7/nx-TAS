@@ -1,3 +1,5 @@
+**NX-TAS IS DEPRECIATED! Check out [tas-script](https://github.com/hamhub7/tas-script) for the lastest in Switch TAS**
+
 # nx-TAS
 > Rewrite of [TAS-nx](https://github.com/hamhub7/TAS-nx)
 
